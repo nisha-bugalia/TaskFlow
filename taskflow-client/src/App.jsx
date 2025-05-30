@@ -1,20 +1,27 @@
 import React from 'react';
 import Navbar from './components/navbar';
+import Sidebar from './components/sidebar';
+import TaskBoard from './components/taskboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
-    <>
-    <BrowserRouter>
-    <Navbar/>
-    <Routes>
-          <Route path="/" />
-          <Route path="/features" />
-          <Route path="/pricing"/>
-          <Route path="/about"/>
-    </Routes>
-    </BrowserRouter>
-    </>
-    
+    <div className="bg-purple-100 min-h-screen text-white">
+      <BrowserRouter>
+        <Navbar />
+        <div className="flex">
+          <Sidebar />
+          <div className="flex-1 p-4 pt-16 ml-64">
+            <TaskBoard />
+            <Routes>
+              <Route path="/features" element={<div>Features Page</div>} />
+              <Route path="/pricing" element={<div>Pricing Page</div>} />
+              <Route path="/about" element={<div>About Page</div>} />
+            </Routes>
+          </div>
+        </div>
+      </BrowserRouter>
+    </div>
   );
 }
 
