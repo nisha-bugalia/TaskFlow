@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 function sidebar() {
   return (
-    <div className="fixed top-16 rounded-2xl w-64 h-[calc(100vh-4rem)] bg-purple-200 text-white">
+    <div className="fixed top-16 mt-2 border-2 border-purple-950 rounded-xl w-64 h-[calc(100vh-4rem)] bg-purple-200 text-white">
   <div class="p-4">
     <h1 class="text-xl font-bold text-gray-900">My WorkSpace</h1>
   </div>
