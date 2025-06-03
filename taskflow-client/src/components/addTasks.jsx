@@ -4,7 +4,7 @@ import { CgAdd } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
 import { GiCancel } from "react-icons/gi";
 import { ImImage } from "react-icons/im";
-
+import { useRef } from "react";
 function AddTasks({
   isOpen,
   onClose,
@@ -13,6 +13,7 @@ function AddTasks({
   setTaskData,
   comments,
   addComment,
+  darkMode,
 }) {
   const [newComment, setNewComment] = useState("");
   const [images, setImages] = useState([]);
@@ -29,6 +30,7 @@ function AddTasks({
     addComment(comment);
     setNewComment("");
   };
+
   const handleDrop = (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
@@ -41,46 +43,76 @@ function AddTasks({
       reader.readAsDataURL(file);
     });
   };
+
   const DragDrop = () => {
+    const fileInputRef = useRef(null);
+
+    const handleFileSelect = (e) => {
+      const files = Array.from(e.target.files);
+      const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+      imageFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setImages((prev) => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    };
     return (
       <div
-        className=" fixed top-0 flex justify-center items-center w-[100vw] h-[100vh] text-black z-20 backdrop-blur-md"
+        className={`fixed top-0 flex justify-center items-center w-[100vw] h-[100vh] z-20 ${
+          darkMode ? "backdrop-blur-md bg-black/60 text-white" : "backdrop-blur-md text-black"
+        }`}
         onDrop={handleDrop}
         onDragOver={(e) => {
           e.preventDefault();
         }}
       >
-        <div className=" h-[50%] bg-white shadow-md w-[70%]  rounded-md p-2 flex flex-col gap-5">
-          <div className=" flex justify-between">
+        <input
+        type="file"
+        multiple
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileSelect}
+        />
+        <div
+          className={`h-[50%] w-[70%] rounded-md p-2 flex flex-col gap-5 shadow-md ${
+            darkMode ? "bg-gray-900" : "bg-white"
+          }`}
+        >
+          <div className="flex justify-between">
+            <div className="h-1/5">Drag and Drop Here</div>
             <div
-              className="h-1/5"
-            
-            >
-             
-              Drag and Drop Here
-            </div>
-            <div className=" cursor-pointer"   onClick={() => {
+              className="cursor-pointer"
+              onClick={() => {
                 setImageAdd(false);
                 setImages([]);
-              }}>
-              {" "}
-              <GiCancel></GiCancel>
+              }}
+            >
+              <GiCancel />
             </div>
           </div>
-          <div className="h-3/5  border-dotted p-2 rounded-lg border-4 flex justify-center items-center">
-            <div className=" text-7xl text-gray-500">
-              <BiPlus></BiPlus>
+          <div
+            className={`h-3/5 border-dotted p-2 rounded-lg border-4 flex justify-center items-center ${
+              darkMode ? "border-gray-500" : "border-gray-300"
+            }`}
+          >
+            <div className="text-7xl text-gray-500 cursor-pointer"
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+            >
+              <BiPlus />
             </div>
           </div>
-
-          <div className=" h-1/5 p-2 flex gap-2 w-[100%]">
-            {images.map((image) => {
-              return (
-                <div className=" overflow-hidden w-1/12 border-[1px] border-gray-300 h-[100%] p-1 rounded-md  flex items-center ">
-                  <img src={image} class=" rounded-md  "></img>
-                </div>
-              );
-            })}
+          <div className="h-1/5 p-2 flex gap-2 w-full">
+            {images.map((image, idx) => (
+              <div
+                key={idx}
+                className="overflow-hidden w-1/12 border border-gray-300 h-full p-1 rounded-md flex items-center"
+              >
+                <img src={image} className="rounded-md" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -88,20 +120,31 @@ function AddTasks({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
-      {imageAdd && <DragDrop></DragDrop>}
+    <div
+      className={`fixed inset-0 flex justify-center items-center z-10 ${
+        darkMode ? "bg-black/70" : "bg-black bg-opacity-50"
+      }`}
+    >
+      {imageAdd && <DragDrop />}
 
-      <div className="relative bg-white rounded-lg p-4 w-full max-w-3xl flex">
+      <div
+        className={`relative rounded-lg p-4 w-full max-w-3xl flex ${
+          darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
+        }`}
+      >
         <button
           onClick={onClose}
-          className="absolute top-1 right-1 text-gray-600 hover:text-black text-xl font-bold"
+          className={`absolute top-1 right-1 text-xl font-bold ${
+            darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"
+          }`}
         >
-          x
+          <GiCancel />
         </button>
+
         {/* Form */}
         <div className="flex-1">
           <div className="flex justify-between items-center border-b pb-2">
-            <h3 className="text-purple-950 text-xl font-semibold">
+            <h3 className="text-xl font-semibold">
               {taskData?.id ? "Edit Task" : "Add Task"}
             </h3>
           </div>
@@ -111,7 +154,11 @@ function AddTasks({
               onSubmit();
             }}
           >
-            <label className="text-black text-lg w-full p-1 block my-2">
+            <label
+              className={`block my-2 text-lg w-full p-1 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Task
             </label>
             <input
@@ -120,12 +167,18 @@ function AddTasks({
               onChange={(e) =>
                 setTaskData({ ...taskData, name: e.target.value })
               }
-              className="text-black w-full p-2 border rounded"
+              className={`w-full p-2 border rounded ${
+                darkMode
+                  ? "bg-gray-800 text-white border-gray-600"
+                  : "bg-white text-black border-gray-300"
+              }`}
               required
             />
             <label
               htmlFor="deadline"
-              className="text-black text-lg w-full p-1 block my-2"
+              className={`block my-2 text-lg w-full p-1 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
             >
               Deadline
             </label>
@@ -136,11 +189,17 @@ function AddTasks({
               onChange={(e) =>
                 setTaskData({ ...taskData, deadline: e.target.value })
               }
-              className="text-black w-full p-2 border rounded"
+              className={`w-full p-2 border rounded ${
+                darkMode
+                  ? "bg-gray-800 text-white border-gray-600"
+                  : "bg-white text-black border-gray-300"
+              }`}
             />
             <label
               htmlFor="description"
-              className="text-black text-lg w-full p-1 block my-2"
+              className={`block my-2 text-lg w-full p-1 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
             >
               Description
             </label>
@@ -151,21 +210,28 @@ function AddTasks({
               onChange={(e) =>
                 setTaskData({ ...taskData, description: e.target.value })
               }
-              className="text-black w-full p-2 border rounded"
+              className={`w-full p-2 border rounded ${
+                darkMode
+                  ? "bg-gray-800 text-white border-gray-600"
+                  : "bg-white text-black border-gray-300"
+              }`}
             />
             <div
-              className="text-black p-2 border-[1px] w-fit rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              className={`p-2 border w-fit rounded-full cursor-pointer mt-2 ${
+                darkMode
+                  ? "bg-gray-700 hover:bg-gray-600 text-white border-gray-500"
+                  : "bg-gray-100 hover:bg-gray-200 text-black"
+              }`}
               onClick={() => {
                 setImageAdd(true);
               }}
             >
-              <ImImage></ImImage>
+              <ImImage />
             </div>
 
             <button
               type="submit"
-              className="bg-purple-600 text-white px-4 py-2 rounded mt-4"
-            >
+              className={`bg-purple-600 text-white px-4 py-2 rounded mt-4 ${darkMode ? 'bg-purple-950 hover:bg-purple-800' : 'bg-purple-600 hover:bg-purple-500'}`}            >
               {taskData?.id ? "Save Changes" : "Add Task"}
             </button>
           </form>
@@ -173,38 +239,65 @@ function AddTasks({
 
         {/* Comments */}
         {taskData?.id && (
-          <div className="flex-1 ml-4 bg-gray-100 p-2 rounded">
-            <div className="flex justify-between ">
-              <h4 className="text-lg text-purple-950 font-semibold mb-2">
-                Comments
-              </h4>
-            </div>
+          <div
+            className={`flex-1 ml-4 p-2 rounded ${
+              darkMode ? "bg-gray-800" : "bg-gray-100"
+            }`}
+          >
+            <h4
+              className={`text-lg font-semibold mb-2 ${
+                darkMode ? "text-white" : "text-purple-950"
+              }`}
+            >
+              Comments
+            </h4>
 
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {comments.map((comment, index) => (
-                <div key={index} className="p-2 bg-white rounded shadow">
-                  <p className="text-sm text-black">{comment.text}</p>
-                  <p className="text-xs text-gray-600">
+                <div
+                  key={index}
+                  className={`p-2 rounded shadow ${
+                    darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+                  }`}
+                >
+                  <p className="text-sm">{comment.text}</p>
+                  <p
+                    className={`text-xs ${
+                      darkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     {comment.user} •{" "}
                     {new Date(comment.timestamp).toLocaleString()}
                   </p>
                 </div>
               ))}
               {comments.length === 0 && (
-                <p className="text-sm text-gray-500">No comments yet.</p>
+                <p
+                  className={`text-sm ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  No comments yet.
+                </p>
               )}
             </div>
+
             <div className="mt-2 flex">
               <input
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                className="flex-1 text-black p-2 border rounded"
+                className={`flex-1 p-2 border rounded ${
+                  darkMode
+                    ? "bg-gray-800 text-white border-gray-600"
+                    : "bg-white text-black border-gray-300"
+                }`}
                 placeholder="Write a comment..."
               />
               <button
                 onClick={handleAddComment}
-                className="bg-purple-600 text-white px-4 py-2 rounded ml-2"
+                className={` px-4 py-2 rounded ml-2 ${darkMode ? 'bg-purple-950 hover:bg-purple-800' : 'bg-purple-600 hover:bg-purple-500'}
+                text-white`}
               >
                 Post
               </button>

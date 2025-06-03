@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/task.png'  // adjust the path as needed
+import { useState } from 'react';
+function Navbar({ darkMode, toggleDarkMode }) {
 
-function Navbar() {
+
   return (
-      <nav className="fixed m-1 mx-auto w-full h-16 rounded-xl border-purple-900 border-2 bg-purple-800 text-white flex items-center justify-between px-4">
+      <nav className={`fixed m-1 mx-auto w-full h-16 rounded-xl border-2 transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-800 border-purple-900 text-white'} flex items-center justify-between px-4`}>
           <div className="flex items-center ">
             <img 
               src={logo} 
@@ -18,7 +20,7 @@ function Navbar() {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full max-w-md px-4 py-2 rounded-xl border border-purple-300 focus:outline-none focus:ring-1 focus:ring-purple-400 text-black"
+              className={`w-full max-w-md px-4 py-2 rounded-xl border border-purple-300 focus:outline-none focus:ring-1 focus:ring-purple-400 text-black ${darkMode?'bg-slate-200':'bg-white'}`}
             />
           </div>
           <ul className="flex space-x-6">
@@ -27,6 +29,14 @@ function Navbar() {
             <li><Link to="/pricing" className="hover:underline">Pricing</Link></li>
             <li><Link to="/contact" className="hover:underline">Contact</Link></li>
           </ul>
+          <button
+            onClick={toggleDarkMode}
+            className=" border-2 border-purple-600 rounded-md ml-3 text-white hover:text-gray-300"
+            title='Switch mode'
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+
       </nav>
   )
 }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import AddTasks from './addTasks';
+import { MdDelete } from 'react-icons/md';
 
-function TaskBoard() {
+function TaskBoard({ darkMode }) {
   const [tasks, setTasks] = useState({
     pending: [],
     current: [],
@@ -11,22 +12,20 @@ function TaskBoard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState('');
   const [highlightCategory, setHighlightCategory] = useState('');
-  const [taskData, setTaskData] = useState(null); // Use null when no task is open
+  const [taskData, setTaskData] = useState(null);
 
   const handleAddClick = (category) => {
     setCurrentCategory(category);
-    // Generate unique ID immediately for new tasks
-    const newId = `${category}-${Date.now()}`;
-    setTaskData({ name: '', deadline: '', description: '', id: null });
+    setTaskData({ name: '', deadline: '', description: '', id: null });  // No ID here
     setIsModalOpen(true);
     setHighlightCategory(category);
     setTimeout(() => setHighlightCategory(''), 1000);
   };
+  
 
   const handleTaskClick = (category, task, index) => {
-    const taskId = `${category}-${index}`;
     setCurrentCategory(category);
-    setTaskData({ ...task, id: taskId });
+    setTaskData({ ...task }); 
     setIsModalOpen(true);
     setHighlightCategory(category);
     setTimeout(() => setHighlightCategory(''), 1000);
@@ -36,34 +35,28 @@ function TaskBoard() {
     if (taskData) {
       setTasks((prev) => {
         const updatedCategory = [...prev[currentCategory]];
-        if (taskData.id) {
-          // Edit existing task by matching id
-          const existingIndex = updatedCategory.findIndex((t) => t.id === taskData.id);
-          if (existingIndex !== -1) {
-            updatedCategory[existingIndex] = {
-              id: taskData.id, // Preserve the ID
-              name: taskData.name,
-              deadline: taskData.deadline,
-              description: taskData.description,
-            };
-          }
+        
+        if (!taskData.id) {
+          taskData.id = `${currentCategory}-${Date.now()}`; // Create new ID only if not present
+          updatedCategory.push({ ...taskData });
         } else {
-          // Add new task with unique id
-          const newTask = {
-            id: `${currentCategory}-${Date.now()}`,
-            name: taskData.name,
-            deadline: taskData.deadline,
-            description: taskData.description,
-          };
-          updatedCategory.push(newTask);
+          const existingIndex = updatedCategory.findIndex(t => t.id === taskData.id);
+          if (existingIndex !== -1) {
+            updatedCategory[existingIndex] = { ...taskData };  // Update existing task
+          } else {
+            updatedCategory.push({ ...taskData }); // Fallback (shouldn't happen)
+          }
         }
+  
         return { ...prev, [currentCategory]: updatedCategory };
       });
+  
       setIsModalOpen(false);
       setTaskData(null);
     }
   };
   
+
   const handleAddComment = (taskId, comment) => {
     setCommentsMap((prev) => ({
       ...prev,
@@ -71,49 +64,112 @@ function TaskBoard() {
     }));
   };
 
+  const handleDeleteTask = (category, index) => {
+    setTasks((prev) => {
+      const updatedCategory = [...prev[category]];
+      updatedCategory.splice(index, 1);
+      return { ...prev, [category]: updatedCategory };
+    });
+  };
+
+  const getCategoryStyles = (category) => {
+    if (!darkMode) {
+      return {
+        bg: category === 'pending' ? 'bg-rose-100' :
+            category === 'current' ? 'bg-indigo-100' :
+            'bg-green-100',
+        text: 'text-purple-950',
+        border: category === 'pending' ? 'border-red-200' :
+                category === 'current' ? 'border-indigo-200' :
+                'border-green-200'
+      };
+    } else {
+      return {
+        bg: category === 'pending' ? 'bg-rose-900' :
+            category === 'current' ? 'bg-indigo-900' :
+            'bg-green-900',
+        text: 'text-white',
+        border: category === 'pending' ? 'border-red-400' :
+                category === 'current' ? 'border-indigo-400' :
+                'border-green-400'
+      };
+    }
+  };
+
   return (
     <div className="flex items-start justify-between p-4 gap-4">
-      {['pending', 'current', 'completed'].map((category) => (
-        <div
-          key={category}
-          className={`border-2 rounded-xl shadow-md p-4 w-1/3
-                      ${highlightCategory === category ? 'border-purple-600' : 'border-gray-300'}
-                      bg-white`}
-        >
-          <h2 className="text-xl text-purple-950 capitalize mb-4">{category}</h2>
-          {tasks[category].length === 0 ? (
-            <p className="text-gray-400 italic">No tasks</p>
-          ) : (
-            <ul className="mb-4">
-              {tasks[category].map((task, index) => (
-                <li
-                  key={`${category}-${index}`}
-                  className="p-2 border border-purple-300 text-purple-950 bg-gray-100 rounded mb-2 cursor-pointer hover:bg-purple-100"
-                  onClick={() => handleTaskClick(category, task, index)}
-                >
-                  {task.name}
-                </li>
-              ))}
-            </ul>
-          )}
-          <button
-            onClick={() => handleAddClick(category)}
-            className="bg-purple-600 text-white px-3 py-1 rounded w-full"
+      {['pending', 'current', 'completed'].map((category) => {
+        const { bg, text, border } = getCategoryStyles(category);
+        return (
+          <div
+            key={category}
+            className={`border-2 rounded-xl shadow-md p-4 w-1/3 transition-colors duration-300
+              ${highlightCategory === category ? 'border-purple-950' : border}
+              ${bg} ${text}`}
           >
-            Add Task
-          </button>
-        </div>
-      ))}
+            <h2 className="text-xl capitalize mb-4">{category}</h2>
+            {tasks[category].length === 0 ? (
+              <p className={`${darkMode ? 'text-indigo-300' : 'text-gray-400'} italic`}>No tasks</p>
+            ) : (
+              <ul className="mb-4">
+                {tasks[category].map((task, index) => (
+                  <li
+                    key={`${category}-${index}`}
+                    className={`relative group p-2 border rounded mb-2 cursor-pointer transition-colors
+                      ${darkMode
+                        ? 'bg-purple-800 border-purple-500 text-white hover:bg-purple-600'
+                        : 'bg-gray-100 border-purple-300 text-purple-950 hover:bg-purple-100'}
+                    `}
+                    onClick={() => handleTaskClick(category, task, index)}
+                  >
+                    {task.name}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteTask(category, index);
+                      }}
+                      className="absolute right-2 top-1 hidden group-hover:block"
+                      title="Delete Task"
+                    >
+                      <MdDelete
+                        size={18}
+                        className={`${
+                          darkMode
+                            ? 'text-red-400 hover:text-red-600'
+                            : 'text-purple-950 hover:text-black'
+                        }`}
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button
+              onClick={() => handleAddClick(category)}
+              className={`w-full px-3 py-1 rounded transition-colors
+                ${darkMode ? 'bg-purple-950 hover:bg-purple-800' : 'bg-purple-600 hover:bg-purple-500'}
+                text-white
+              `}
+            >
+              Add Task
+            </button>
+          </div>
+        );
+      })}
 
       {isModalOpen && (
         <AddTasks
           isOpen={isModalOpen}
-          onClose={() => { setIsModalOpen(false); setTaskData(null); }}
+          onClose={() => {
+            setIsModalOpen(false);
+            setTaskData(null);
+          }}
           onSubmit={handleModalSubmit}
           taskData={taskData}
           setTaskData={setTaskData}
           comments={commentsMap[taskData?.id] || []}
           addComment={(comment) => handleAddComment(taskData?.id, comment)}
+          darkMode={darkMode}
         />
       )}
     </div>
