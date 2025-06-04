@@ -76,21 +76,21 @@ function TaskBoard({ darkMode }) {
     if (!darkMode) {
       return {
         bg: category === 'pending' ? 'bg-rose-100' :
-            category === 'current' ? 'bg-indigo-100' :
+            category === 'current' ? 'bg-yellow-100' :
             'bg-green-100',
         text: 'text-purple-950',
         border: category === 'pending' ? 'border-red-200' :
-                category === 'current' ? 'border-indigo-200' :
+                category === 'current' ? 'border-yellow-200' :
                 'border-green-200'
       };
     } else {
       return {
         bg: category === 'pending' ? 'bg-rose-900' :
-            category === 'current' ? 'bg-indigo-900' :
+            category === 'current' ? 'bg-yellow-800' :
             'bg-green-900',
         text: 'text-white',
-        border: category === 'pending' ? 'border-red-400' :
-                category === 'current' ? 'border-indigo-400' :
+        border: category === 'pending' ? 'border-rose-400' :
+                category === 'current' ? 'border-yellow-400' :
                 'border-green-400'
       };
     }
