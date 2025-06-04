@@ -20,8 +20,8 @@ function Sidebar({ darkMode }) {
   };
 
   return (
-    <div className={`fixed top-16 mt-2 border-2 rounded-xl w-64 h-[calc(100vh-4rem)] transition-colors duration-300 
-      ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-200 border-purple-900 text-gray-900'}`}>
+    <div className={`fixed top-16 mt-2 border-2 rounded-lg w-64 h-[calc(100vh-4rem)] transition-colors duration-300 
+      ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-200 border-purple-950 text-gray-900'}`}>
 
       <div className="p-4">
         <h1 className="text-xl font-bold">My WorkSpace</h1>

@@ -7,7 +7,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
   const navigate = useNavigate();
 
   return (
-    <nav className={`fixed m-1 mx-auto w-full h-16 rounded-xl border-2 transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-800 border-purple-900 text-white'} flex items-center justify-between px-4`}>
+    <nav className={`fixed m-1 mx-auto w-full h-16 rounded-lg border-2 transition-colors duration-300 ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-800 border-purple-900 text-white'} flex items-center justify-between px-4`}>
       <div className="flex items-center">
         <img src={logo} alt="TaskFlow Logo" className="h-15 w-20 rounded-full" />
         <h1 className="text-3xl font-bold">TaskFlow</h1>

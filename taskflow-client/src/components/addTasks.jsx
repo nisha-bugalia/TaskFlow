@@ -82,7 +82,7 @@ function AddTasks({
           }`}
         >
           <div className="flex justify-between">
-            <div className="h-1/5">Drag and Drop Here</div>
+            <div className="h-1/5">Drag and Drop Here or Click + To Add Image</div>
             <div
               className="cursor-pointer"
               onClick={() => {

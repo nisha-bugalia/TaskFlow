@@ -5,6 +5,8 @@ import Navbar from './components/navbar';
 import Sidebar from './components/Sidebar';
 import TaskBoard from './components/taskboard';
 import LoginModal from './components/LoginModal';
+import ContactPage from './components/ContactPage';
+import Footer from './Footer';
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
@@ -26,9 +28,9 @@ function AppContent() {
         <div className="flex-1 p-4 pt-16 ml-64">
           <Routes>
             <Route path="/" element={<TaskBoard darkMode={darkMode} />} />
-            <Route path="/features" element={<div>Features Page</div>} />
-            <Route path="/pricing" element={<div>Pricing Page</div>} />
             <Route path="/about" element={<div>About Page</div>} />
+            <Route path="/pricing" element={<div>Pricing Page</div>} />
+            <Route path="/contact" element={<><ContactPage darkMode={darkMode} /><Footer darkMode={darkMode} /></>} />
           </Routes>
         </div>
       </div>
