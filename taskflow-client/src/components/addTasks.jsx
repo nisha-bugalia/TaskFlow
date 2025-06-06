@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BiPlus } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
@@ -14,6 +14,7 @@ function AddTasks({
   comments,
   addComment,
   darkMode,
+  taskModalOpenRef
 }) {
   const [newComment, setNewComment] = useState("");
   const [images, setImages] = useState([]);
@@ -30,6 +31,11 @@ function AddTasks({
     addComment(comment);
     setNewComment("");
   };
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+  }, [isOpen])
+
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -77,7 +83,7 @@ function AddTasks({
         onChange={handleFileSelect}
         />
         <div
-          className={`h-[50%] w-[70%] rounded-md p-2 flex flex-col gap-5 shadow-md ${
+          className={`h-auto w-[95%] sm:w-[70%] rounded-md p-2 flex flex-col gap-5 shadow-md ${
             darkMode ? "bg-gray-900" : "bg-white"
           }`}
         >
@@ -104,7 +110,7 @@ function AddTasks({
               <BiPlus />
             </div>
           </div>
-          <div className="h-1/5 p-2 flex gap-2 w-full">
+          <div className="h-1/5 p-2 flex flex-wrap gap-2 w-full overflow-y-auto">
             {images.map((image, idx) => (
               <div
                 key={idx}
@@ -121,14 +127,16 @@ function AddTasks({
 
   return (
     <div
-      className={`fixed inset-0 flex justify-center items-center z-10 ${
+    
+      className={`fixed inset-0 flex justify-center items-center z-[10000] ${
         darkMode ? "bg-black/70" : "bg-black bg-opacity-50"
       }`}
     >
       {imageAdd && <DragDrop />}
 
       <div
-        className={`relative rounded-lg p-4 w-full max-w-3xl flex ${
+      ref={taskModalOpenRef}
+          className={`relative rounded-lg p-4 w-[95%] sm:w-full max-w-3xl flex flex-col sm:flex-row ${
           darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
         }`}
       >
@@ -240,7 +248,7 @@ function AddTasks({
         {/* Comments */}
         {taskData?.id && (
           <div
-            className={`flex-1 ml-4 p-2 rounded ${
+          className={`flex-1 sm:ml-4 mt-4 sm:mt-0 p-2 rounded ${
               darkMode ? "bg-gray-800" : "bg-gray-100"
             }`}
           >
@@ -282,7 +290,7 @@ function AddTasks({
               )}
             </div>
 
-            <div className="mt-2 flex">
+            <div className="mt-2 flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={newComment}

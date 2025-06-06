@@ -12,7 +12,7 @@ function LoginModal({ isOpen, onClose, darkMode }) {
     onClose();
   };
 
-  return (
+  return ( 
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div
         className={`p-6 rounded shadow-md w-96 ${

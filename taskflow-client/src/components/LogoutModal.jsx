@@ -4,7 +4,7 @@ function LogoutModal({ isOpen, onClose, onConfirm, darkMode }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 z-[1000] flex items-center bg-black bg-opacity-50  justify-center">
       <div
         className={`p-6 rounded-lg shadow-xl w-80 ${
           darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
