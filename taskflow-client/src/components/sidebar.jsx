@@ -5,6 +5,7 @@ import { FcSettings } from "react-icons/fc";
 import { MdDashboard } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LogoutModal from "./LogoutModal";
+import { FaFile, FaFolder } from "react-icons/fa";
 
 function Sidebar({ darkMode, isOpen, sidebarRef }) {
   const [showLogout, setShowLogout] = useState(false);
@@ -24,12 +25,12 @@ function Sidebar({ darkMode, isOpen, sidebarRef }) {
     <div 
     ref={sidebarRef}
     className={`
-      fixed top-16 left-0 z-[900] border-2 rounded-lg w-64 h-[calc(100vh-4rem)] transition-transform duration-300
-      ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-200 border-purple-950 text-gray-900'}
+       z-[900] rounded-lg w-fit pr-12 h-[100vh] transition-transform duration-300 m-3
+      ${darkMode ? 'bg-gray-800 border-white text-white' : 'bg-white border-purple-950 text-gray-900  shadow-md'}
       ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:block
     `}>
       <div className="p-4">
-        <h1 className="text-xl font-bold">My WorkSpace</h1>
+        <h1 className="text-xl font-bold flex items-center gap-2"> <div className=" p-3 bg-purple-600 w-fit rounded-full"><FaFolder className=" text-white"></FaFolder></div>My WorkSpace</h1>
       </div>
 
       <nav className="flex flex-col gap-2 px-2">
