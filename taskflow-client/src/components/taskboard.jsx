@@ -3,6 +3,13 @@ import AddTasks from "./addTasks";
 import { MdDelete } from "react-icons/md";
 
 function TaskBoard({ darkMode, isModalOpen, setIsModalOpen, taskModalOpenRef }) {
+
+  const categoryLabels = {
+    pending: "TO DO",
+    current: "IN PROGRESS",
+    completed: "DONE",
+  };
+
   const [tasks, setTasks] = useState({
     pending: [],
     current: [],
@@ -105,6 +112,9 @@ function TaskBoard({ darkMode, isModalOpen, setIsModalOpen, taskModalOpenRef }) 
               : "border-green-400",
       };
     }
+
+    
+    
   };
 
   return (
@@ -119,7 +129,7 @@ function TaskBoard({ darkMode, isModalOpen, setIsModalOpen, taskModalOpenRef }) 
                 ${highlightCategory === category ? "border-purple-950 shadow-sm" : border}
                 ${bg} ${text}`}
             >
-              <h2 className="text-xl capitalize mb-4">{category}</h2>
+              <h2 className="text-xl font-semibold text-indigo-900 capitalize mb-4">{categoryLabels[category]}</h2>
               {tasks[category].length === 0 ? (
                 <p
                   className={`${darkMode ? "text-indigo-300" : "text-gray-400"} italic`}
