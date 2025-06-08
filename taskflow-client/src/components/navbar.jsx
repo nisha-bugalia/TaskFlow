@@ -1,84 +1,110 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/task.png';
-import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/task.png";
+import { FaUser, FaBars, FaTimes, FaSun, FaMoon, FaBell } from "react-icons/fa";
+import { CgMoon, CgSun } from "react-icons/cg";
+import { GiMoon } from "react-icons/gi";
+import { BiSearch } from "react-icons/bi";
 
-function Navbar({ darkMode, toggleDarkMode, menuOpen, setMenuOpen, navbarMenuRef }) {
+function Navbar({
+  darkMode,
+  toggleDarkMode,
+  menuOpen,
+  setMenuOpen,
+  navbarMenuRef,
+}) {
   const navigate = useNavigate();
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : 'auto';
-  }, [menuOpen])
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+  }, [menuOpen]);
 
-  {(menuOpen) && (
-    <div
-      className="fixed inset-0 z-[950] bg-black opacity-0 cursor-not-allowed"
-      onClick={(e) => e.stopPropagation()}
-    ></div>
-  )}
+  {
+    menuOpen && (
+      <div
+        className="fixed inset-0 z-[950] bg-black opacity-0 cursor-not-allowed"
+        onClick={(e) => e.stopPropagation()}
+      ></div>
+    );
+  }
 
   return (
-    <nav className={`fixed w-full h-16 rounded-lg border-2 z-[1000] transition-colors duration-300 
-      ${darkMode ? 'bg-gray-800 border-purple-600 text-white' : 'bg-purple-800 border-purple-900 text-white'} 
-      flex items-center justify-between px-4`}>
-      
+    <nav
+      className={`sticky  w-[76vw] h-16 rounded-lg b z-10 border-b-[1px] border-gray-300 m-1  transition-colors duration-300 
+      ${darkMode ? "bg-gray-800  text-white" : "white"} 
+      flex items-center justify-between px-4 text-black`}
+    >
       {/* Logo + Title */}
       <div className="flex items-center">
-        <img src={logo} alt="TaskFlow Logo" className="h-10 w-12 rounded-full" />
-        <h1 className="text-2xl sm:text-3xl font-bold ml-2">TaskFlow</h1>
-      </div>
-
-      {/* Search Bar (hidden on small screens) */}
-      <div className="hidden md:flex items-center justify-end flex-1 mr-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          className={`w-full max-w-md md:max-w-md px-4 py-2 rounded-xl border border-purple-300 focus:outline-none focus:ring-1 focus:ring-purple-400 text-black 
-            ${darkMode ? 'bg-slate-200' : 'bg-white'}`}
-        />
+        <h1 className="md:text-2xl text-xl font-bold ml-2">ProFlow</h1>
       </div>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex space-x-6">
+      {/* <ul className="hidden md:flex space-x-6">
         <li><Link to="/" className="hover:underline">Home</Link></li>
         <li><Link to="/about" className="hover:underline">About</Link></li>
         <li><Link to="/pricing" className="hover:underline">Pricing</Link></li>
         <li><Link to="/contact" className="hover:underline">Contact</Link></li>
-      </ul>
+      </ul> */}
 
       {/* Right Side Buttons (Desktop Only) */}
-      <div className="hidden md:flex items-center ml-3 space-x-2">
+      <div className="hidden md:flex items-center gap-2 p-2">
+        {/* Search Bar (hidden on small screens) */}
+        <div className="hidden md:flex items-center justify-end flex-1 bg-white border-gray-300 border p-2 rounded-lg gap-2">
+          <BiSearch className=" text-3xl text-gray-500"></BiSearch>
+          <input
+            type="text"
+            placeholder="Search..."
+            className={`w-full max-w-md md:max-w-md bg-inherit font-[300]  focus:outline-none  text-black  hover:selection:outline-none border-0`}
+          />
+        </div>
         <button
           onClick={toggleDarkMode}
-          className="border-2 py-1 px-2 border-purple-600 rounded-md text-white hover:text-gray-300"
+          className="border p-3 border-gray-200 rounded-lg bg-white"
           title="Switch mode"
         >
-          {darkMode ? '☀️' : '🌙'}
+          {darkMode ? (
+            <FaSun className=" text-gray-700"></FaSun>
+          ) : (
+            <FaMoon className=" text-gray-700"></FaMoon>
+          )}
         </button>
         <button
-          onClick={() => navigate('/modal-login')}
-          className={`flex items-center gap-2 px-2 py-2 rounded transition
-            ${darkMode
-              ? 'bg-white text-black hover:bg-gray-200'
-              : 'bg-purple-100 text-purple-900 hover:bg-purple-200'
+         
+          className="border p-3 border-gray-200 rounded-lg bg-white"
+          title="Notifications"
+        >
+        
+            <FaBell className=" text-gray-700"></FaBell>
+        
+
+      
+        </button>
+        <button
+          onClick={() => navigate("/modal-login")}
+          className={`flex items-center gap-2 px-2 py-2 rounded-full transition ml-4
+            ${
+              darkMode
+                ? "bg-white text-black hover:bg-gray-200"
+                : "bg-white text-purple-900 hover:bg-purple-200"
             }`}
         >
-          <FaUser className="text-lg" />
+          <FaUser className="text-2xl" />
         </button>
       </div>
 
       {/* Hamburger for Mobile */}
-      <button
+      {/* <button
         className="md:hidden text-xl ml-2"
         onClick={() => setMenuOpen(!menuOpen)}
       >
         {menuOpen ? <FaTimes /> : <FaBars />}
-      </button>
+      </button> */}
 
       {/* Mobile Menu */}
-      {menuOpen && (
+      {/* {menuOpen && (
         <div
         ref={navbarMenuRef}
-         className={`absolute top-16 left-0 w-full bg-purple-900 text-white flex flex-col items-center py-4 space-y-4 md:hidden z-[9999]`}>
+         className={`  text-white flex flex-col items-center py-4 space-y-4 md:hidden`}>
           <input
             type="text"
             placeholder="Search..."
@@ -108,7 +134,7 @@ function Navbar({ darkMode, toggleDarkMode, menuOpen, setMenuOpen, navbarMenuRef
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </nav>
   );
 }
