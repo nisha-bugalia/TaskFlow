@@ -13,7 +13,6 @@ function TaskBoard({
   setIsModalOpen,
   taskModalOpenRef,
 }) {
-  const [draggingId, setDraggingId] = useState(null);
   const [commentsMap, setCommentsMap] = useState({});
   const [currentCategory, setCurrentCategory] = useState("");
   const [highlightCategory, setHighlightCategory] = useState("");
@@ -273,7 +272,6 @@ function TaskBoard({
       priority: "Medium",
       createdAt: "2025-06-07T00:00:00.000Z",
     },
-    // ... (rest of the tasks array remains the same)
   ]);
   
   const [positions, setPositions] = useState({});
