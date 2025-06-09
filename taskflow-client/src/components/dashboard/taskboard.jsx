@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import AddTasks from "./addTasks";
 import { MdDelete, MdMore, MdOutlineVerticalDistribute } from "react-icons/md";
 import { FaCalendar, FaHamburger, FaLine } from "react-icons/fa";
 import { BiCalendar, BiDotsHorizontal } from "react-icons/bi";
 import { CgMore, CgMoreVertical } from "react-icons/cg";
 import TimelineComponent from "./Timeline";
 import TaskList from "./TaskList";
+import TaskSummary from "./TaskSummary";
+import Header from "./Header";
+import AddTasksModal from "./AddTasksModal";
+
+
 
 function TaskBoard({
   darkMode,
@@ -18,6 +22,16 @@ function TaskBoard({
   const [highlightCategory, setHighlightCategory] = useState("");
   const [taskData, setTaskData] = useState(null);
   const [timeline, setTimeline] = useState([]);
+
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+
+
+  const taskSummaryData = {
+    total: 230,
+    completed: 112,
+    incomplete: 99,
+    review: 19,
+  };
   
   const handleClick = (e, id) => {
     const onMouseMove = (e) => {
@@ -275,11 +289,24 @@ function TaskBoard({
   ]);
   
   const [positions, setPositions] = useState({});
+  const handleCreateTask = () => {
+    console.log("Create task clicked!");
+    // Trigger modal or route here
+  };
 
   return (
     <div className="flex flex-col gap-4 items-stretch">
+      <Header userName="UserName" date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
+      <TaskSummary data={taskSummaryData} />
       {timeline.length > 0 && <TimelineComponent tasks={tasks} />}
       <TaskList tasks={tasks} setTasks={setTasks} />
+       {/* Add Task Modal */}
+       {showAddTaskModal && (
+        <AddTasksModal
+        onClose={() => setShowAddTaskModal(false)
+        }
+      />
+      )}
     </div>
   );
 }

@@ -80,7 +80,7 @@ function Navbar({
       
         </button>
         <button
-          onClick={() => navigate("/modal-login")}
+          onClick={() => navigate("/login")}
           className={`flex items-center gap-2 px-2 py-2 rounded-full transition ml-4
             ${
               darkMode
