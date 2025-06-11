@@ -16,6 +16,8 @@ import Footer from "./Footer";
 import SignupForm from "./components/SignupForm";
 import VerifyPendingPage from "./components/VerifyPendingPage";
 import EmailVerifyPage from "./components/EmailVerifyPage";
+import MainProjectsPage from "./components/MainProjectsPage";
+import OnboardingFlow from "./components/OnboardingFlow";
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
@@ -30,7 +32,11 @@ function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isAuthRoute = location.pathname === "/login" || location.pathname === "/signup"||location.pathname === "/verify-pending" || location.pathname==="/verify-email";
+  const isAuthRoute = location.pathname === "/login" 
+   ||location.pathname === "/signup"
+   ||location.pathname === "/verify-pending" 
+   || location.pathname==="/verify-email"
+   || location.pathname==="/onboarding-flow";
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -98,6 +104,12 @@ function AppContent() {
                     />
                   }
                 />
+                <Route
+                  path="/projects"
+                  element={
+                    <MainProjectsPage/>
+                  }
+                />
               </Routes>
             </main>
           </div>
@@ -113,6 +125,7 @@ function AppContent() {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/verify-pending" element={<VerifyPendingPage />} />
         <Route path="/verify-email" element={<EmailVerifyPage />} />
+        <Route path="/onboarding-flow" element={<OnboardingFlow/>}/>
         </Routes>
         </>
 

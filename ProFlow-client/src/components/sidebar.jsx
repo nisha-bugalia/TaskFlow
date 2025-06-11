@@ -6,6 +6,8 @@ import { MdDashboard } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LogoutModal from "./LogoutModal";
 import { FaFile, FaFolder } from "react-icons/fa";
+import { BsCollection } from 'react-icons/bs';
+
 
 function Sidebar({ darkMode, isOpen, sidebarRef }) {
   const [showLogout, setShowLogout] = useState(false);
@@ -42,6 +44,10 @@ function Sidebar({ darkMode, isOpen, sidebarRef }) {
         <Link to="/profile" className={`flex items-center p-2 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-purple-100'}`}>
           <CgUser className="mr-2" />
           Profile
+        </Link>
+        <Link to="/projects" className={`flex items-center p-2 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-purple-100'}`}>
+          <BsCollection className="mr-2" />
+          Projects
         </Link>
 
         <Link to="/settings" className={`flex items-center p-2 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-purple-100'}`}>
