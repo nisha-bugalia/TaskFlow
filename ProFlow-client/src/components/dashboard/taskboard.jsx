@@ -296,7 +296,7 @@ function TaskBoard({
 
   return (
     <div className="flex flex-col gap-4 items-stretch">
-      <Header userName="UserName" date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
+      <Header title="Welcome Back, " subtitle="Your Team’s Success Starts Here. Let’s Make Progress Together!" userName="UserName" date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
       <TaskSummary data={taskSummaryData} />
       {timeline.length > 0 && <TimelineComponent tasks={tasks} />}
       <TaskList tasks={tasks} setTasks={setTasks} />

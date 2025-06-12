@@ -5,7 +5,38 @@ import { ImImage } from "react-icons/im";
 import { useRef } from "react";
 
 
-const AddTasksModal = ({ onClose }) => {
+const AddTasksModal = ({ onClose, onSave }) => {
+
+  const [title, setTitle] = useState("");
+  const [tag, setTag] = useState("General");
+  const [description, setDescription] = useState("");
+  const [priorityValue, setPriorityValue] = useState(2); // 1 to 4
+  const [deadline, setDeadline] = useState('');
+
+  const priorityMap = {
+    1: "Low",
+    2: "Medium",
+    3: "High",
+    4: "Critical",
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title || !description || !deadline) return;
+
+    onSave({
+      title,          
+      description,          
+      tag,  
+      startDate: new Date().toISOString(),
+      dueDate: new Date(deadline).toISOString(),
+      priority: priorityMap[priorityValue],
+      progress: 0,
+      completedTasks: 0,
+      totalTasks: 0,
+     });
+  };
+
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
@@ -15,7 +46,6 @@ const AddTasksModal = ({ onClose }) => {
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [priorityValue, setPriorityValue] = useState(2); // 1 to 4
 
 
   const [images, setImages] = useState([]);
@@ -141,21 +171,34 @@ const handleDrop = (e) => {
 
         {/* Task Form */}
         <div className="flex-1">
-          <h2 className="text-2xl font-semibold mb-4">Add New Task</h2>
-          <form className="flex flex-col gap-4">
+          <h2 className="text-2xl font-semibold mb-4">Add New Project</h2>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
               placeholder="Task title"
               className="border border-gray-300 rounded p-2"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Task tag"
+              className="border border-gray-300 rounded p-2"
+              value={tag}
+          onChange={(e) => setTag(e.target.value)}
             />
             <textarea
               placeholder="Task description"
               className="border border-gray-300 rounded p-2 h-24"
+              value={description}
+          onChange={(e) => setDescription(e.target.value)}
             ></textarea>
             <div className="flex gap-4">
               <input
                 type="date"
                 className="border border-gray-300 rounded p-2 flex-1"
+                value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
               />
               <input
                 type="text"
@@ -198,8 +241,9 @@ const handleDrop = (e) => {
             <button
               type="submit"
               className="bg-black hover:bg-grey-700 text-white font-medium py-2 px-4 rounded"
+              
             >
-              Create Task
+              Create Project
             </button>
           </form>
         </div>

@@ -8,7 +8,7 @@ function MainProjectsPage() {
 
 
     
-    const sampleProjects = [
+    const [projects, setProjects] = useState([
         {
         id: 1,
         title: "Portfolio Website",
@@ -33,7 +33,20 @@ function MainProjectsPage() {
         completedTasks: 4,
         totalTasks: 10,
         },
-    ];
+    ]);
+
+    const handleAddProject=(newProject)=>{
+      const projectWithId={
+        ...newProject,
+        id:Date.now(),
+        progress:0,
+        completedTasks:0,
+        totalTasks:0,
+      }
+      setProjects((prev)=>[...prev, projectWithId]);
+      setShowAddTaskModal(false);
+
+    }
 
 
 
@@ -41,7 +54,7 @@ function MainProjectsPage() {
     <div>
       <Header title="Your Projects" subtitle="Organize, track, and conquer your projects effortlessly." date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {sampleProjects.map((project) => (
+      {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
     </div>
@@ -49,6 +62,7 @@ function MainProjectsPage() {
         <AddTasksModal
         onClose={() => setShowAddTaskModal(false)
         }
+        onSave={handleAddProject}
       />
       )}
     </div>

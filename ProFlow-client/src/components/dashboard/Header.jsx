@@ -2,14 +2,14 @@ import React from "react";
 import { FiPlus } from "react-icons/fi";
 import { BiCalendar } from "react-icons/bi";
 
-const Header = ({ userName = "User name", date = "Sep 02, 2025", onCreateTask }) => {
+const Header = ({title, subtitle, userName, date, onCreateTask }) => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-4 py-4">
       {/* Left Greeting */}
       <div>
-        <h1 className="text-2xl font-bold">Welcome Back, {userName}</h1>
+        <h1 className="text-2xl font-bold">{title} {userName}</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Your Team’s Success Starts Here. Let’s Make Progress Together!
+          {subtitle}
         </p>
       </div>
 
