@@ -27,7 +27,7 @@ const TaskCard = ({ title, count, type }) => (
 
 const TaskSummary = ({ data }) => {
   return (
-    <div className="flex justify-between flex-wrap px-4 pt-4">
+    <div className="flex justify-between flex-wrap pt-4">
       <TaskCard title="Total Projects" count={data.total} type="total" />
       <TaskCard title="Completed Projects" count={data.completed} type="completed" />
       <TaskCard title="Incomplete Projects" count={data.incomplete} type="incomplete" />
