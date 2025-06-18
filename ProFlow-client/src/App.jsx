@@ -23,7 +23,22 @@ import { Toaster } from 'react-hot-toast';
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleDarkMode = () => {
+    const isDark = !darkMode;
+    setDarkMode(isDark);
+  
+    // Apply or remove the `dark` class on <html>
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  
+    // (Optional) Save to localStorage for persistence
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  };
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [projects, setProjects] = useState([
@@ -131,7 +146,7 @@ const handleAddProject=(newProject)=>{
           <div className="flex flex-col w-full">
             <Navbar
               darkMode={darkMode}
-              toggleDarkMode={() => setDarkMode(!darkMode)}
+              toggleDarkMode={toggleDarkMode}
               menuOpen={menuOpen}
               setMenuOpen={setMenuOpen}
               navbarMenuRef={navbarMenuRef}

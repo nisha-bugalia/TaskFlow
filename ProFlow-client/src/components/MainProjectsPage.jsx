@@ -65,7 +65,7 @@ function MainProjectsPage({projects, setProjects}) {
 };
    
   return (
-    <div>
+    <div className='md:ml-[20vw] p-4'>
       <Header title="Your Projects" subtitle="Organize, track, and conquer your projects effortlessly." date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {projects.map((project) => (

@@ -9,7 +9,7 @@ const Project_TasksSummary = () => {
   ];
 
   return (
-    <div className=" border border-gray-200 w-full bg-white py-4 px-6 rounded-xl mb-2">
+    <div className=" border-b border-gray-200 w-full bg-white py-4 px-6 rounded-lg rounded-b-none mt-2">
       <div className="flex items-center justify-between gap-6">
         {summaryData.map((item, index) => (
           <div

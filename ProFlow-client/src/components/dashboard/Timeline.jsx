@@ -73,7 +73,7 @@ function Timeline({ tasks = [] }) {
   }
 
   return (
-    <div className="flex-col flex p-3 pt-0 pb-0 bg-white rounded-lg w-fit gap-5 relative h-96 overflow-y-scroll text-black">
+    <div className="flex-col flex p-3 pt-0 pb-0 bg-white rounded-lg w-full gap-5 relative h-96 overflow-y-scroll text-black">
       <div className="font-bold text-xl sticky bg-white w-[100%] p-6 pl-0 top-0 z-40">
         Project Timeline
       </div>

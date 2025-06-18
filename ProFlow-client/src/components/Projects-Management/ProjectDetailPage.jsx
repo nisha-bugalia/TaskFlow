@@ -9,6 +9,8 @@ import { useLocation } from 'react-router-dom'
 import Project_TasksSummary from './Project_TasksSummary'
 import AddTasksModal from '../dashboard/AddTasksModal'
 import ProjectViewToggle from './ProjectViewToggle'
+import ListViewTasks from './ListViewTasks'
+import Timeline from '../dashboard/Timeline'
 
 
 
@@ -143,6 +145,8 @@ function ProjectDetailPage({projects, setProjects}) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const project = projects.find(p => p.id.toString() === id);
 
+    const [activeTab, setActiveTab] = useState('Overview');
+
     const handleSave = (updatedProject) => {
       const updated = projects.map(p => p.id === updatedProject.id ? updatedProject : p);
       setProjects(updated);
@@ -150,7 +154,7 @@ function ProjectDetailPage({projects, setProjects}) {
 
     if (!project) {
         return (
-            <div className="p-6">
+            <div className="p-6 ">
             <h2 className="text-xl font-semibold text-red-500">
                 Project not found or not passed correctly.
             </h2>
@@ -162,14 +166,21 @@ function ProjectDetailPage({projects, setProjects}) {
 
 
   return (
-    <div>
-      <ProjectHeader id={id} title={project.title} />
+    <div className='md:ml-[20vw] p-4'>
+      <ProjectHeader id={id} title={project.title} activeTab={activeTab}
+  onTabChange={setActiveTab} />
+  {activeTab=='Overview'&& (
+     <>
       <Project_TasksSummary/>
       <ProjectSummary description={project.description} dueDate={project.dueDate}
-      priority={project.priority}
-      status={project.status}
-      onEdit={() => setIsEditOpen(true)}
-      />
+            priority={project.priority}
+            status={project.status}
+            onEdit={() => setIsEditOpen(true)}/> 
+      </> 
+    )}
+
+
+      
       {isEditOpen && (
       <AddTasksModal
         isEdit
@@ -178,7 +189,15 @@ function ProjectDetailPage({projects, setProjects}) {
         onSave={handleSave}
       />
     )}
-    <ProjectViewToggle tasks={tasks} setTasks={setTasks} />
+    {activeTab=='List' && (<ListViewTasks tasks={tasks} setTasks={setTasks} />
+)}
+    
+    {activeTab=='Board' && (<ProjectViewToggle tasks={tasks} setTasks={setTasks} />
+)}
+{activeTab=='Timeline' && (<Timeline tasks={tasks}/>
+)}
+    
+    
     </div>
   )
 }

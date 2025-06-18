@@ -19,7 +19,7 @@ const TaskCard = ({ title, count, type }) => (
         <MdOutlineAssignment size={50} className={`${cardStyles.colors[type]} rounded-full p-2 mr-3`}/>
         <div className="flex flex-col">
             <div className="text-2xl font-bold">{count}</div>
-            <div className="text-sm text-gray-500">Total Project Counts</div>
+            <div className="text-sm text-gray-500">Total Task Counts</div>
         </div>
     </div>
   </div>
@@ -28,10 +28,10 @@ const TaskCard = ({ title, count, type }) => (
 const TaskSummary = ({ data }) => {
   return (
     <div className="flex justify-between flex-wrap pt-4">
-      <TaskCard title="Total Projects" count={data.total} type="total" />
-      <TaskCard title="Completed Projects" count={data.completed} type="completed" />
-      <TaskCard title="Incomplete Projects" count={data.incomplete} type="incomplete" />
-      <TaskCard title="Under Review Projects" count={data.review} type="review" />
+      <TaskCard title="Total Tasks" count={data.total} type="total" />
+      <TaskCard title="Completed Tasks" count={data.completed} type="completed" />
+      <TaskCard title="Incomplete Tasks" count={data.incomplete} type="incomplete" />
+      <TaskCard title="Under Review Tasks" count={data.review} type="review" />
     </div>
   );
 };

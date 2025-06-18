@@ -8,8 +8,10 @@ import TaskList from "./TaskList";
 import TaskSummary from "./TaskSummary";
 import Header from "./Header";
 import AddTasksModal from "./AddTasksModal";
-
-
+import TaskStatusChart from "./AnalyticCharts/TaskStatusChart";
+import TasksThisWeekCard from "./TasksThisWeekCard ";
+import ChartSection from "./ChartSection";
+import ActivityFeed from "./ActivityFeed";
 
 function TaskBoard({
   darkMode,
@@ -25,14 +27,6 @@ function TaskBoard({
 
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
-
-  const taskSummaryData = {
-    total: 230,
-    completed: 112,
-    incomplete: 99,
-    review: 19,
-  };
-  
   const handleClick = (e, id) => {
     const onMouseMove = (e) => {
       console.log(positions);
@@ -85,11 +79,11 @@ function TaskBoard({
     );
     setTimeline(x);
   };
-  
+
   useEffect(() => {
     times();
   }, []);
-  
+
   const handleAddClick = (category) => {
     setCurrentCategory(category);
     setTaskData({ name: "", deadline: "", description: "", id: null });
@@ -164,7 +158,7 @@ function TaskBoard({
     createdAt: "2025-05-30T00:00:00.000Z",
     updatedAt: "2025-06-06T00:00:00.000Z",
   };
-  
+
   const [tasks, setTasks] = useState([
     {
       id: "task001",
@@ -183,16 +177,16 @@ function TaskBoard({
       project: "proj123",
       title: "Build Login API",
       description: "JWT based secure login system",
-      status: "Done",
+      status: "In Progress",
       assignedTo: "user2",
       startDate: "2025-06-07T08:00:00.000Z",
-      dueDate: "2025-06-10T00:00:00.000Z",
+      dueDate: "2025-06-20T00:00:00.000Z",
       priority: "High",
       createdAt: "2025-06-07T00:00:00.000Z",
     },
     {
       id: "task003",
-      project: "proj123",
+      project: "proj122",
       title: "Setup MongoDB Schema",
       description: "Define data models for tasks and users",
       status: "Not Started",
@@ -207,16 +201,16 @@ function TaskBoard({
       project: "proj123",
       title: "Create Project Dashboard",
       description: "Dashboard to display project status",
-      status: "Done",
+      status: "Not Started",
       assignedTo: "user4",
       startDate: "2025-06-10T08:00:00.000Z",
-      dueDate: "2025-06-12T00:00:00.000Z",
+      dueDate: "2025-06-22T00:00:00.000Z",
       priority: "Medium",
       createdAt: "2025-06-07T00:00:00.000Z",
     },
     {
       id: "task005",
-      project: "proj123",
+      project: "proj124",
       title: "Write Unit Tests",
       description: "Add test coverage for auth module",
       status: "In Progress",
@@ -252,7 +246,7 @@ function TaskBoard({
     },
     {
       id: "task008",
-      project: "proj123",
+      project: "proj124",
       title: "Optimize Load Time",
       description: "Improve performance using lazy loading",
       status: "In Progress",
@@ -276,7 +270,7 @@ function TaskBoard({
     },
     {
       id: "task010",
-      project: "proj123",
+      project: "proj125",
       title: "Deploy to Production",
       description: "Push latest build to live server",
       status: "Done",
@@ -287,7 +281,15 @@ function TaskBoard({
       createdAt: "2025-06-07T00:00:00.000Z",
     },
   ]);
-  
+  const taskSummaryData = {
+    total: tasks.length,
+    completed: tasks.filter((task) => task.status === "Done").length,
+    incomplete: tasks.filter(
+      (task) => task.status !== "Done" && task.status !== "In Progress"
+    ).length,
+    review: tasks.filter((task) => task.status === "In Progress").length,
+  };
+
   const [positions, setPositions] = useState({});
   const handleCreateTask = () => {
     console.log("Create task clicked!");
@@ -295,17 +297,25 @@ function TaskBoard({
   };
 
   return (
-    <div className="flex flex-col gap-4 items-stretch">
-      <Header title="Welcome Back, " subtitle="Your Team’s Success Starts Here. Let’s Make Progress Together!" userName="UserName" date={new Date().toDateString()} onCreateTask={() => setShowAddTaskModal(true)} />
-      <TaskSummary data={taskSummaryData} />
-      {timeline.length > 0 && <TimelineComponent tasks={tasks} />}
-      <TaskList tasks={tasks} setTasks={setTasks} />
-       {/* Add Task Modal */}
-       {showAddTaskModal && (
-        <AddTasksModal
-        onClose={() => setShowAddTaskModal(false)
-        }
+    <div className="md:ml-[20vw] p-4 flex flex-col gap-4 items-stretch">
+      <Header
+        title="Welcome Back, "
+        subtitle="Your Team’s Success Starts Here. Let’s Make Progress Together!"
+        userName="UserName"
+        date={new Date().toDateString()}
+        onCreateTask={() => setShowAddTaskModal(true)}
       />
+      <TaskSummary data={taskSummaryData} />
+      <TasksThisWeekCard tasks={tasks} onClick={() => navigate("/projects")} />
+      <ChartSection tasks={tasks} />
+
+      {timeline.length > 0 && <TimelineComponent tasks={tasks} />}
+      {/* <TaskList tasks={tasks} setTasks={setTasks} /> */}
+      <ActivityFeed/>
+
+      {/* Add Task Modal */}
+      {showAddTaskModal && (
+        <AddTasksModal onClose={() => setShowAddTaskModal(false)} />
       )}
     </div>
   );
