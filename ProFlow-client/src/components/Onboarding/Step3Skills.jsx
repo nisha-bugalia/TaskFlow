@@ -29,7 +29,7 @@ const Step3Skills = ({ next, back, updateData }) => {
   };
 
   const handleSubmit=()=>{
-    navigate("/dashboard");
+    navigate("/upload");
   }
 
 

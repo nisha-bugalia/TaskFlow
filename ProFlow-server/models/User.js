@@ -18,9 +18,6 @@ const userSchema = new mongoose.Schema({
   },
   emailToken: {
     type: String,
-  },
-  tokenExpiry: {
-    type: Date,
-  },
+  }
 });
 module.exports = mongoose.model("User", userSchema);

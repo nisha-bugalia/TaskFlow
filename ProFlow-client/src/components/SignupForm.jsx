@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+
 import {
   FaGoogle,
   FaMicrosoft,
@@ -8,8 +10,10 @@ import {
   FaEyeSlash,
   FaEye,
 } from "react-icons/fa";
+import Loading from "./Loading";
 
 const SignupForm = () => {
+  const [showLoading,setShowLoading]=useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userDetails, setUserDetails] = useState({
     fullName: "",
@@ -22,29 +26,36 @@ const SignupForm = () => {
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
+    setShowLoading(true);
     e.preventDefault();
-    fetch("http://localhost:5000/user/signup",{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
+    fetch("http://localhost:5000/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        userDetails
-      )
-    }).then(res=>res.json()).then(data=>console.log(data)).catch(err=> console.log(err))
-    navigate("/verify-pending");
-    navigate("/onboarding-flow");
+      body: JSON.stringify(userDetails),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.message === "Verification sent Successfully") {
+          navigate("/verify-pending");
+        } else {
+          alert(data.message); // अगर error हो तो alert दिखाओ
+        }
+      })
+      .catch((err) => console.log(err));
   };
- 
 
   return (
     <div className="flex py-10 items-center justify-center min-h-screen bg-gray-100">
+      {showLoading && <Loading></Loading>}
       <div className="flex flex-col justify-center items-center bg-white shadow-lg p-8 rounded-xl w-full max-w-md">
         <h1 className="text-3xl font-bold my-4">ProFlow</h1>
         <h2 className="text-base font-semibold mb-6 text-gray-700">
           Sign up to continue
         </h2>
-        <form onSubmit={handleSignup}>
+        <form>
           <label className="w-full text-sm font-semibold mb-1">Full Name</label>
           <input
             onChange={(e) =>
@@ -69,7 +80,10 @@ const SignupForm = () => {
           <div className="relative w-full max-w-sm mb-2">
             <input
               onChange={(e) =>
-                setUserDetails({ ...userDetails, password: (e.target.value).toString() })
+                setUserDetails({
+                  ...userDetails,
+                  password: e.target.value.toString(),
+                })
               }
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
@@ -111,9 +125,7 @@ const SignupForm = () => {
           <button
             type="submit"
             className="w-full bg-purple-800 text-white py-2 rounded mb-4 hover:bg-black"
-            onClick={() => {
-              console.log(userDetails);
-            }}
+            onClick={handleSignup}
           >
             Sign up
           </button>

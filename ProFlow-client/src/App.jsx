@@ -18,6 +18,8 @@ import VerifyPendingPage from "./components/VerifyPendingPage";
 import EmailVerifyPage from "./components/EmailVerifyPage";
 import MainProjectsPage from "./components/MainProjectsPage";
 import OnboardingFlow from "./components/OnboardingFlow";
+import Step1Role from "./components/Onboarding/Step1Role";
+import UploadImage from "./components/UploadImage";
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
@@ -36,7 +38,54 @@ function AppContent() {
    ||location.pathname === "/signup"
    ||location.pathname === "/verify-pending" 
    || location.pathname==="/verify-email"
-   || location.pathname==="/onboarding-flow";
+   || location.pathname==="/onboarding-flow" || location.pathname==="/signupstep1" || location.pathname==="/upload";
+
+  const [output, setOutput] = useState("");
+
+  // useEffect(() => {
+  //   const loadWasm = async () => {
+  //     const Module = await window.TaskSorterModule({
+  //       locateFile: (path) => `/wasm/${path}`,
+  //     });
+
+  //     const tasks = new Module.TaskList();
+
+  //     const task1 = new Module.Task();
+  //     task1.task = "Submit Report";
+  //     task1.priority = 9;
+  //     task1.deadline = 2;
+
+  //     const task2 = new Module.Task();
+  //     task2.task = "Call Client";
+  //     task2.priority = 5;
+  //     task2.deadline = 1;
+
+  //     const task3 = new Module.Task();
+  //     task3.task = "Design UI";
+  //     task3.priority = 2;
+  //     task3.deadline = 4;
+
+  //     tasks.push_back(task1);
+  //     tasks.push_back(task2);
+  //     tasks.push_back(task3);
+
+  //     const result = Module.rankTasks(tasks);
+
+  //     let outputText = "";
+  //     for (let i = 0; i < result.size(); i++) {
+  //       const t = result.get(i);
+  //       outputText += `${i + 1}. ${t.task} (P: ${t.priority}, D: ${t.deadline})\n`;
+  //     }
+
+  //     setOutput(outputText);
+  //   };
+
+  //   // Load JS glue code for WASM
+  //   const script = document.createElement("script");
+  //   script.src = "/wasm/task_sorter.js";
+  //   script.onload = loadWasm;
+  //   document.body.appendChild(script);
+  // }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -75,6 +124,9 @@ function AppContent() {
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       } min-h-screen font-inter w-full`}
     >
+{/* 
+       <h2>🧠 Task Sorter using C++ + WebAssembly + React</h2>
+      <pre>{output}</pre>  */}
       {/* If NOT login/signup page, show sidebar + navbar */}
       {!isAuthRoute && (
         <div className="flex">
@@ -123,6 +175,8 @@ function AppContent() {
           <Route path="/login" element={<LoginModal />} />
           {/* <Route path="/signup" element={<SignupPage />} /> */}
         <Route path="/signup" element={<SignupForm />} />
+        <Route path="/upload" element={<UploadImage />} />
+        
         <Route path="/verify-pending" element={<VerifyPendingPage />} />
         <Route path="/verify-email" element={<EmailVerifyPage />} />
         <Route path="/onboarding-flow" element={<OnboardingFlow/>}/>
