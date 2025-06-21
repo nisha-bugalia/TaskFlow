@@ -8,15 +8,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.1",
     "axios": "^1.10.0",
     "framer-motion": "^12.18.1",
     "jsonwebtoken": "^9.0.2",
+=======
+    "@headlessui/react": "^2.2.4",
+    "@hello-pangea/dnd": "^18.0.1",
+    "chart.js": "^4.5.0",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
+>>>>>>> 29883fda152ace9379a1ef12aba83bef399ca1c7
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
     "react-calendar-timeline": "^0.27.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.1"

@@ -5,26 +5,39 @@ import { ImImage } from "react-icons/im";
 import { useRef } from "react";
 
 
-const AddTasksModal = ({ onClose, onSave }) => {
+const AddTasksModal = ({ onClose, onSave, isEdit = false, initialData = {}  }) => {
 
-  const [title, setTitle] = useState("");
-  const [tag, setTag] = useState("General");
-  const [description, setDescription] = useState("");
-  const [priorityValue, setPriorityValue] = useState(2); // 1 to 4
-  const [deadline, setDeadline] = useState('');
-
+  const [title, setTitle] = useState(initialData.title||"");
+  const [tag, setTag] = useState(initialData.tag||"General");
+  const [description, setDescription] = useState(initialData.description||"");
   const priorityMap = {
     1: "Low",
     2: "Medium",
     3: "High",
     4: "Critical",
   };
+  
+  const reversePriorityMap = {
+    Low: 1,
+    Medium: 2,
+    High: 3,
+    Critical: 4,
+  };
+  
+  const [priorityValue, setPriorityValue] = useState(
+    initialData.priority ? reversePriorityMap[initialData.priority] : 2
+  );
+    const [deadline, setDeadline] = useState(
+    initialData.dueDate ? initialData.dueDate.slice(0, 10) : ''
+  );
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title || !description || !deadline) return;
 
-    onSave({
+    const updatedProject={
+      ...initialData,
       title,          
       description,          
       tag,  
@@ -34,7 +47,9 @@ const AddTasksModal = ({ onClose, onSave }) => {
       progress: 0,
       completedTasks: 0,
       totalTasks: 0,
-     });
+     };
+     onSave(updatedProject);
+     onClose();
   };
 
     useEffect(() => {
@@ -171,7 +186,7 @@ const handleDrop = (e) => {
 
         {/* Task Form */}
         <div className="flex-1">
-          <h2 className="text-2xl font-semibold mb-4">Add New Project</h2>
+          <h2 className="text-2xl font-semibold mb-4">{isEdit ? 'Edit Project' : 'Create Project'}</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
@@ -243,7 +258,7 @@ const handleDrop = (e) => {
               className="bg-black hover:bg-grey-700 text-white font-medium py-2 px-4 rounded"
               
             >
-              Create Project
+              {isEdit ? 'Save Changes' : 'Create Project'}
             </button>
           </form>
         </div>

@@ -29,7 +29,7 @@ function Navbar({
 
   return (
     <nav
-      className={`sticky  w-[76vw] h-[4rem] rounded-lg b z-10 border-b-[1px] border-gray-300 m-1  transition-colors duration-300 
+      className={`md:ml-[22vw] p-4 sticky  w-[76vw] h-[4rem] rounded-lg b z-10 border-b-[1px] border-gray-300 m-1  transition-colors duration-300 
       ${darkMode ? "bg-gray-800  text-white" : "white"} 
       flex items-center justify-between px-4 text-black`}
     >

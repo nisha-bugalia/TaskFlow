@@ -26,7 +26,7 @@ function Sidebar({ darkMode, isOpen, sidebarRef }) {
     <>
     <div 
     ref={sidebarRef}
-    className={`
+    className={`fixed
        z-[900] rounded-lg w-[20vw] pr-12 h-[100vh] transition-transform duration-300 m-3
       ${darkMode ? 'bg-gray-800 border-white text-white' : 'bg-white border-purple-950 text-gray-900  shadow-md'}
       ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:block
