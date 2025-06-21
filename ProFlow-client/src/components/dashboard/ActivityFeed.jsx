@@ -14,7 +14,7 @@ dayjs.extend(relativeTime);
 const dummyActivities = [
   {
     id: 1,
-    user: "Arjun Desai",
+    user: "",
     avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxKH-GHG7GKA11hkYH9--j0OynoGFFVsMZjw&s",
     action: "completed",
     target: "Build Login API",

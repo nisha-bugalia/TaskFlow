@@ -151,7 +151,7 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Missing Fields" });
   }
   try {
-    const user =await User.findOne({ email });
+    const user = await User.findOne({ email });
     console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -161,22 +161,21 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
     const token = jwt.sign({ email }, "12345", { expiresIn: "1d" });
-    res.status(200).cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
-      maxAge: 24 * 60 * 60 * 1000,
-    }).json({message:"Let's Dive into the Proflow Setup"});
-    
+    res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Strict",
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json({ message: "Let's Dive into the Proflow Setup" });
   } catch (err) {
     console.error(err);
 
-    return res
-      .status(500)
-      .json({
-        
-        message: process.env.NODE_ENV === "development" ? err.message : undefined,
-      });
+    return res.status(500).json({
+      message: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
   }
 });
 

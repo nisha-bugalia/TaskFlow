@@ -18,13 +18,11 @@ import VerifyPendingPage from "./components/VerifyPendingPage";
 import EmailVerifyPage from "./components/EmailVerifyPage";
 import MainProjectsPage from "./components/MainProjectsPage";
 import OnboardingFlow from "./components/OnboardingFlow";
-<<<<<<< HEAD
 import Step1Role from "./components/Onboarding/Step1Role";
 import UploadImage from "./components/UploadImage";
-=======
 import ProjectDetailPage from "./components/Projects-Management/ProjectDetailPage";
 import { Toaster } from 'react-hot-toast';
->>>>>>> 29883fda152ace9379a1ef12aba83bef399ca1c7
+
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
@@ -186,14 +184,13 @@ const handleAddProject=(newProject)=>{
         darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
       } min-h-screen font-inter w-full`}
     >
-<<<<<<< HEAD
+
 {/* 
        <h2>🧠 Task Sorter using C++ + WebAssembly + React</h2>
       <pre>{output}</pre>  */}
-=======
+
       <Toaster position="top-center" reverseOrder={false} />
->>>>>>> 29883fda152ace9379a1ef12aba83bef399ca1c7
-      {/* If NOT login/signup page, show sidebar + navbar */}
+     {/* If NOT login/signup page, show sidebar + navbar */}
       {!isAuthRoute && (
         <div className="flex">
           <Sidebar
