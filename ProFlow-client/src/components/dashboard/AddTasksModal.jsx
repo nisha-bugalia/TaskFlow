@@ -11,10 +11,12 @@ const AddTasksModal = ({
   isEdit = false,
   initialData = {},
 }) => {
+  const [currentMember, setCurrentMember] = useState(null);
+  const [members, setMembers] = useState([]);
   const [title, setTitle] = useState(initialData.title || "");
   const [tag, setTag] = useState(initialData.tag || "General");
   const [description, setDescription] = useState(initialData.description || "");
-
+const [userNotFound,setUserNotFound]=useState(false);
   const priorityMap = {
     1: "Low",
     2: "Medium",
@@ -35,11 +37,18 @@ const AddTasksModal = ({
   const [deadline, setDeadline] = useState(
     initialData.dueDate ? initialData.dueDate.slice(0, 10) : ""
   );
-
+  const removeMember = (member) => {
+    try {
+      const newMem = members.filter((mem) => mem !== member);
+      setMembers(newMem);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res=await axios.post(
+      const res = await axios.post(
         "http://localhost:5000/project/create-project",
         { title, description },
         {
@@ -67,6 +76,27 @@ const AddTasksModal = ({
     onClose();
   };
 
+  const addUser = () => {
+    console.log(currentMember);
+    axios
+      .post("http://localhost:5000/project/check-user", {
+        email: currentMember,
+      })
+      .then((res) => {
+        alert(res.data.message);
+        setMembers([...members, currentMember]);
+        setCurrentMember(null);
+        
+      })
+      .catch((error) => {
+        if(error.status===404){
+          setUserNotFound(true);
+        }
+        setTimeout(()=>{
+          setUserNotFound(false)
+        },250)
+       console.log(error?.response?.data?.message||error.message);});
+  };
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -229,11 +259,28 @@ const AddTasksModal = ({
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
               />
-              <input
-                type="text"
-                placeholder="Assign to"
-                className="border border-gray-300 rounded p-2 flex-1"
-              />
+              <div className=" flex items-center justify-center">
+                <input
+                  type="text"
+                  placeholder="Assign to"
+                  value={currentMember || ""}
+                  onChange={(e) => setCurrentMember(e.target.value)}
+                  className="border rounded p-2 flex-1 "
+                  style={ {   borderStyle: "solid",  // required
+  
+  borderColor: userNotFound ? "red" : "gray",
+  backgroundColor:userNotFound ? "rgba(255,0,0,0.1)" : "white",
+  color:userNotFound ? "rgba(255,0,0)" : "black",
+  transition: "all 0.3s ease",
+                  }}
+                />
+                <div className=" p-2 cursor-pointer" onClick={addUser}>
+                  <BiPlus></BiPlus>
+                </div>
+              </div>
+              {members.map((member) => (
+                <div onClick={()=>{removeMember(member)}} className=" cursor-pointer"> {member}</div>
+              ))}
             </div>
 
             <div className="mt-4">
