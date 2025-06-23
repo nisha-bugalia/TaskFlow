@@ -5,6 +5,7 @@ import { FaUser, FaBars, FaTimes, FaSun, FaMoon, FaBell } from "react-icons/fa";
 import { CgMoon, CgSun } from "react-icons/cg";
 import { GiMoon } from "react-icons/gi";
 import { BiSearch } from "react-icons/bi";
+import NotificationDropdown from "./NotificationDropdown";
 
 function Navbar({
   darkMode,
@@ -68,17 +69,7 @@ function Navbar({
             <FaMoon className=" text-gray-700"></FaMoon>
           )}
         </button>
-        <button
-         
-          className="border p-3 border-gray-200 rounded-lg bg-white"
-          title="Notifications"
-        >
-        
-            <FaBell className=" text-gray-700"></FaBell>
-        
-
-      
-        </button>
+            <NotificationDropdown/>
         <button
           onClick={() => navigate("/login")}
           className={`flex items-center gap-2 px-2 py-2 rounded-full transition ml-4

@@ -11,6 +11,7 @@ import AddTasksModal from '../dashboard/AddTasksModal'
 import ProjectViewToggle from './ProjectViewToggle'
 import ListViewTasks from './ListViewTasks'
 import Timeline from '../dashboard/Timeline'
+import MessagesTab from './Messages/MessagesTab'
 
 
 
@@ -195,6 +196,8 @@ function ProjectDetailPage({projects, setProjects}) {
     {activeTab=='Board' && (<ProjectViewToggle tasks={tasks} setTasks={setTasks} />
 )}
 {activeTab=='Timeline' && (<Timeline tasks={tasks}/>
+)}
+{activeTab=='Messages' && (<MessagesTab/>
 )}
     
     

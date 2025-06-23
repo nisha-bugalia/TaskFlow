@@ -4,6 +4,7 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
+import ProjectShareModal from "./ProjectShareModal";
 
 const statusOptions = ["On track", "At risk", "Off track"];
 
@@ -18,6 +19,9 @@ const ProjectSummarySection = ({
   const [descValue, setDescValue] = useState(description);
   const [projectStatus, setProjectStatus] = useState("On track");
   const [localDueDate, setLocalDueDate] = useState(new Date(dueDate));
+
+  const [showModal, setShowModal] = useState(false);
+
 
   const handleDescSave = () => {
     setIsEditingDesc(false);
@@ -71,9 +75,12 @@ const ProjectSummarySection = ({
         <div>
           <p className="text-lg text-black font-semibold mb-1">Project roles</p>
           <div className="flex items-center gap-3">
-            <button className="border-dashed border border-purple-400 text-sm text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100">
+            <button
+            onClick={()=>setShowModal(true)}
+             className="border-dashed border border-purple-400 text-sm text-gray-800 px-3 py-1 rounded-full hover:bg-purple-100">
               + Add member
             </button>
+            <ProjectShareModal isOpen={showModal} onClose={()=>setShowModal(false)}/>
             <div className="bg-purple-200 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm">
               Ni
             </div>
@@ -115,20 +122,21 @@ const ProjectSummarySection = ({
             ))}
           </div>
           <div className="mt-4 text-gray-700">
-  <p className="text-sm text-gray-500 font-semibold mb-1">Due Date:</p>
-  <div className="relative w-fit flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-lg bg-gray-50 hover:border-purple-400 text-sm">
-    <FiCalendar className="text-purple-500" />
-    <DatePicker
-      selected={localDueDate}
-      onChange={(date) => {
-        setLocalDueDate(date);
-      }}
-      dateFormat="MMM dd, yyyy"
-      className="bg-transparent outline-none w-full"
-    />
-  </div>
-</div>
-
+            <p className="text-sm text-gray-500 font-semibold mb-1">
+              Due Date:
+            </p>
+            <div className="relative w-fit flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-lg bg-gray-50 hover:border-purple-400 text-sm">
+              <FiCalendar className="text-purple-500" />
+              <DatePicker
+                selected={localDueDate}
+                onChange={(date) => {
+                  setLocalDueDate(date);
+                }}
+                dateFormat="MMM dd, yyyy"
+                className="bg-transparent outline-none w-full"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
