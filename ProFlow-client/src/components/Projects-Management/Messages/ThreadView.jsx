@@ -69,7 +69,7 @@ export default function ThreadView({ thread, updateThread }) {
       </div>
 
       {/* Message List */}
-      <div ref={ref} className="flex-1 overflow-y-auto space-y-4 mb-4">
+      <div ref={ref} className="flex-1 overflow-y-visible space-y-4 mb-4">
         <AnimatePresence>
           {thread.messages.map((m) => (
             <motion.div
