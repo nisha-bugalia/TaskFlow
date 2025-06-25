@@ -23,7 +23,7 @@ const CommentInput = ({ onSend }) => {
 
   const addEmoji = (emoji) => {
     setMessage((prev) => prev + emoji.native);
-    setShowPicker(false);
+   
   };
 
   return (

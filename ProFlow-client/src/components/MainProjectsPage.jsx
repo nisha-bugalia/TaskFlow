@@ -60,8 +60,6 @@ function MainProjectsPage({projects, setProjects}) {
     setProjects(prev => [...prev, projectWithId]);
   }
 
-  
-
 };
    
   return (

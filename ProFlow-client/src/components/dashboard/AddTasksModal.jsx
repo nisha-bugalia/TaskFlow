@@ -11,10 +11,12 @@ const AddTasksModal = ({
   isEdit = false,
   initialData = {},
 }) => {
+  const [currentMember, setCurrentMember] = useState(null);
+  const [members, setMembers] = useState([]);
   const [title, setTitle] = useState(initialData.title || "");
-  const [tag, setTag] = useState(initialData.tag || "General");
+  const [tag, setTag] = useState(initialData.tag || "");
   const [description, setDescription] = useState(initialData.description || "");
-
+  const [userNotFound, setUserNotFound] = useState(false);
   const priorityMap = {
     1: "Low",
     2: "Medium",
@@ -35,11 +37,18 @@ const AddTasksModal = ({
   const [deadline, setDeadline] = useState(
     initialData.dueDate ? initialData.dueDate.slice(0, 10) : ""
   );
-
+  const removeMember = (member) => {
+    try {
+      const newMem = members.filter((mem) => mem !== member);
+      setMembers(newMem);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res=await axios.post(
+      const res = await axios.post(
         "http://localhost:5000/project/create-project",
         { title, description },
         {
@@ -67,6 +76,27 @@ const AddTasksModal = ({
     onClose();
   };
 
+  const addUser = () => {
+    console.log(currentMember);
+    axios
+      .post("http://localhost:5000/project/check-user", {
+        email: currentMember,
+      })
+      .then((res) => {
+        alert(res.data.message);
+        setMembers([...members, currentMember]);
+        setCurrentMember(null);
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          setUserNotFound(true);
+        }
+        setTimeout(() => {
+          setUserNotFound(false);
+        }, 250);
+        console.log(error?.response?.data?.message || error.message);
+      });
+  };
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -163,26 +193,6 @@ const AddTasksModal = ({
     );
   };
 
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      const newEntry = {
-        text: newComment.trim(),
-        time: new Date(),
-        author: "Arjun",
-      };
-      setComments([newEntry, ...comments]);
-      setNewComment("");
-    }
-  };
-
-  const formatTime = (date) =>
-    `${date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    })}`;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-[1000]">
@@ -209,31 +219,59 @@ const AddTasksModal = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <input
+            {/* <input
               type="text"
               placeholder="Task tag"
               className="border border-gray-300 rounded p-2"
               value={tag}
               onChange={(e) => setTag(e.target.value)}
-            />
-            <textarea
+            /> */}
+            {/* <textarea
               placeholder="Task description"
               className="border border-gray-300 rounded p-2 h-24"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
+            ></textarea> */}
             <div className="flex gap-4">
-              <input
+              {/* <input
                 type="date"
                 className="border border-gray-300 rounded p-2 flex-1"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Assign to"
-                className="border border-gray-300 rounded p-2 flex-1"
-              />
+              /> */}
+              {/* <div className=" flex items-center justify-center">
+                <input
+                  type="text"
+                  placeholder="Assign to"
+                  value={currentMember || ""}
+                  onChange={(e) => setCurrentMember(e.target.value)}
+                  className="border rounded p-2 flex-1 "
+                  style={{
+                    borderStyle: "solid", // required
+
+                    borderColor: userNotFound ? "red" : "gray",
+                    backgroundColor: userNotFound
+                      ? "rgba(255,0,0,0.1)"
+                      : "white",
+                    color: userNotFound ? "rgba(255,0,0)" : "black",
+                    transition: "all 0.3s ease",
+                  }}
+                />
+                <div className=" p-2 cursor-pointer" onClick={addUser}>
+                  <BiPlus></BiPlus>
+                </div>
+              </div> */}
+              {/* {members.map((member) => (
+                <div
+                  onClick={() => {
+                    removeMember(member);
+                  }}
+                  className=" cursor-pointer"
+                >
+                  {" "}
+                  {member}
+                </div>
+              ))} */}
             </div>
 
             <div className="mt-4">
@@ -301,47 +339,7 @@ const AddTasksModal = ({
           </form>
         </div>
 
-        {/* Comments Section */}
-        <div className="w-[280px] flex flex-col border-l border-gray-300 pl-4 max-h-[500px] overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-2">Comments and Activity</h3>
-
-          {/* Comment Input */}
-          <div className="mb-4 flex">
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
-              placeholder="Write a comment..."
-              className="w-full border border-gray-300 p-2 rounded text-sm"
-            />
-            <button
-              onClick={handleAddComment}
-              className="mx-1 p-2 border bg-purple-950 text-teal-50 rounded"
-            >
-              Post
-            </button>
-          </div>
-
-          {/* Comment List */}
-          {comments.map((comment, index) => (
-            <div key={index} className="mb-3">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">
-                  {comment.author[0]}
-                </div>
-                <div className="text-sm font-medium">{comment.author}</div>
-              </div>
-              <div className="ml-8 text-sm bg-gray-100 p-2 rounded">
-                {comment.text}
-              </div>
-              <div className="ml-8 text-xs text-gray-500 mt-1">
-                {formatTime(comment.time)}
-              </div>
-            </div>
-          ))}
         </div>
-      </div>
     </div>
   );
 };

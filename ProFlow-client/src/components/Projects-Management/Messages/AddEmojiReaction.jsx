@@ -36,7 +36,7 @@ export default function AddEmojiReaction({ messageId, onReact }) {
       </button>
 
       {isOpen && (
-        <div className="absolute bottom-full left-0 z-[10000]">
+        <div className="absolute bottom-[calc(100%+8px)] left-0 z-[10000]">
           <Picker
             data={data}
             onEmojiSelect={handleEmojiSelect}
