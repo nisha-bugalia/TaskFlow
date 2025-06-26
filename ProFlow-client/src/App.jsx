@@ -222,10 +222,10 @@ const handleAddProject=(newProject)=>{
                 <Route
                   path="/projects"
                   element={
-                    <MainProjectsPage projects={projects} setProjects={setProjects}/>
+                    <MainProjectsPage/>
                   }
                 />
-                <Route path="projects/:id" element={<ProjectDetailPage projects={projects} setProjects={setProjects}/> } />
+                <Route path="/projects/:id" element={<ProjectDetailPage projects={projects} setProjects={setProjects}/> } />
               </Routes>
             </main>
           </div>

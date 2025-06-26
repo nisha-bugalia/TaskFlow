@@ -91,9 +91,9 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           {project.title}
         </h2>
-        <span className="text-xs font-semibold bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+        {/* <span className="text-xs font-semibold bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
           #{project.tag}
-        </span>
+        </span> */}
       </div>
       <p className="text-sm text-gray-800 mt-1 line-clamp-3">
         {project.description}
@@ -107,7 +107,7 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
           />
         </div>
         <p className="text-xs text-right mt-1 text-gray-400">
-          {project.completedTasks}/{project.totalTasks} tasks completed
+          {/* {project.completedTasks}/{project.totalTasks} tasks completed */}
         </p>
       </div>
     </div>
