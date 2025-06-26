@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 const connect = require("../ProFlow-server/config/db");
 const userRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/project");
+const taskRoutes = require("./routes/task");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -29,6 +30,8 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 //For project related api
 app.use("/project", projectRoutes);
+//For task related api
+app.use("/task", taskRoutes);
 // static file serving
 app.use("/uploads", express.static("uploads"));
 const storage = multer.diskStorage({
@@ -63,11 +66,9 @@ app.post("/api/upload", upload.single("image"), async (req, res) => {
       res.status(500).json({ error: "Failed to write file" });
     });
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        error: "No Face Detected. Try another Image for Profile Photo.",
-      });
+    res.status(400).json({
+      error: "No Face Detected. Try another Image for Profile Photo.",
+    });
   }
 });
 app.listen(PORT, () => {

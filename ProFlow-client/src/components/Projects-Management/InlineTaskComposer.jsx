@@ -1,22 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { FiCalendar } from 'react-icons/fi';
-import { format } from 'date-fns';
-
-
-const InlineTaskComposer = ({ status, onCreate, onClose }) => {
-  const [title, setTitle] = useState('');
-  const [priority, setPriority] = useState('');
-  const [assignee, setAssignee] = useState('');
-  const [dueDate, setDueDate] = useState('');
+import React, { useEffect, useRef, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { FiCalendar } from "react-icons/fi";
+import { format } from "date-fns";
+import axios from "axios"
+const InlineTaskComposer = ({ projectId, status, onCreate, onClose }) => {
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState("");
+  const [assignee, setAssignee] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const iconRef = useRef(null);
-
+ 
   const composerRef = useRef();
 
-const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
-const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
+  const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
 
   // Calculate position of calendar relative to icon
   useEffect(() => {
@@ -31,14 +30,17 @@ const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest('.datepicker-container') && !e.target.closest('.calendar-icon')) {
+      if (
+        !e.target.closest(".datepicker-container") &&
+        !e.target.closest(".calendar-icon")
+      ) {
         setShowCalendar(false);
       }
     };
-    if (showCalendar) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    if (showCalendar)
+      document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showCalendar]);
-
 
   // ✅ Detect outside click
   useEffect(() => {
@@ -52,21 +54,31 @@ const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
         }
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [title, priority, assignee, dueDate]);
 
   const handleSubmit = () => {
     if (!title.trim()) return; // avoid adding blank title
-    const newTask = {
-      id: `${Date.now()}`,
-      title,
-      priority,
-      assignee,
-      dueDate,
-      status,
-    };
-    onCreate(newTask); // ✅ send to parent
+console.log(status);
+    // ✅ send to parent
+    axios
+      .post("http://localhost:5000/task/create-task", {
+        projectId,
+        title,
+        priority,
+        assignee,
+        endDate:dueDate,
+        status,
+      })
+      .then((res) => {
+
+        console.log(res.data.message);
+        onCreate(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
   };
 
   return (
@@ -93,8 +105,6 @@ const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
           <option>Medium</option>
           <option>Low</option>
         </select>
-
-    
       </div>
 
       <div className="flex gap-2">
@@ -106,37 +116,36 @@ const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
           className="p-1 rounded bg-white border border-gray-200 w-1/2"
         />
         <div className="relative w-auto">
-  <div
-    className="flex items-center gap-1 cursor-pointer p-1 bg-white rounded border border-gray-200"
-    onClick={() => setShowCalendar(true)}
-  >
-    <FiCalendar className="text-gray-600" />
-    <span className="text-gray-700 text-sm">
-      {dueDate ? format(dueDate, 'MMMM d') : ''}
-    </span>
-  </div>
+          <div
+            className="flex items-center gap-1 cursor-pointer p-1 bg-white rounded border border-gray-200"
+            onClick={() => setShowCalendar(true)}
+          >
+            <FiCalendar className="text-gray-600" />
+            <span className="text-gray-700 text-sm">
+              {dueDate ? format(dueDate, "MMMM d") : ""}
+            </span>
+          </div>
 
-  {showCalendar && (
-        <div
-          className="datepicker-container absolute z-[9999] bg-white shadow-lg border border-gray-300 rounded"
-          style={{
-            top: `${calendarPosition.top}px`,
-            left: `${calendarPosition.left}px`,
-            position: 'absolute',
-          }}
-        >
-          <DatePicker
-            selected={dueDate}
-            onChange={(date) => {
-              setDueDate(date);
-              setShowCalendar(false);
-            }}
-            inline
-          />
+          {showCalendar && (
+            <div
+              className="datepicker-container absolute z-[9999] bg-white shadow-lg border border-gray-300 rounded"
+              style={{
+                top: `${calendarPosition.top}px`,
+                left: `${calendarPosition.left}px`,
+                position: "absolute",
+              }}
+            >
+              <DatePicker
+                selected={dueDate}
+                onChange={(date) => {
+                  setDueDate(date);
+                  setShowCalendar(false);
+                }}
+                inline
+              />
+            </div>
+          )}
         </div>
-      )}
-</div>
-
       </div>
     </div>
   );
