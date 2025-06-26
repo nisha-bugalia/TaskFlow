@@ -128,8 +128,8 @@ const ProjectSummarySection = ({
             <div className="relative w-fit flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-lg bg-gray-50 hover:border-purple-400 text-sm">
               <FiCalendar className="text-purple-500" />
               <DatePicker
-                selected={localDueDate}
-                onChange={(date) => {
+  selected={dueDate?dueDate : null}
+  onChange={(date) => {
                   setLocalDueDate(date);
                 }}
                 dateFormat="MMM dd, yyyy"

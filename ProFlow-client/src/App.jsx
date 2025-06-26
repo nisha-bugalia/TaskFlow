@@ -22,7 +22,7 @@ import Step1Role from "./components/Onboarding/Step1Role";
 import UploadImage from "./components/UploadImage";
 import ProjectDetailPage from "./components/Projects-Management/ProjectDetailPage";
 import { Toaster } from 'react-hot-toast';
-
+import axios from "axios";
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
@@ -44,34 +44,19 @@ function AppContent() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [projects, setProjects] = useState([
-    {
-    id: 1,
-    title: "Portfolio Website",
-    startDate: "2025-06-08T19:00:00.000Z",
-    dueDate: "2025-06-11T00:00:00.000Z",
-    priority: "High",
-    description: "Design and build a personal portfolio using React and Tailwind CSS.",
-    tag: "Frontend",
-    status: "Done",
-    progress: 70,
-    completedTasks: 7,
-    totalTasks: 10,
-    },
-    {
-    id: 2,
-    title: "E-commerce Backend",
-    startDate: "2025-06-08T19:00:00.000Z",
-    dueDate: "2025-06-11T00:00:00.000Z",
-    priority: "Low",
-    description: "Develop RESTful APIs for product, cart, and user modules.",
-    tag: "Backend",
-    status: "In Progress",
-    progress: 40,
-    completedTasks: 4,
-    totalTasks: 10,
-    },
-]);
+
+
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+  axios.get("http://localhost:5000/project/get-projects", {
+    withCredentials: true,
+  })
+  .then((res) => {
+    setProjects(res.data.projects);
+  })
+  .catch((error) => console.log(error));
+}, []);
+
 
 const handleAddProject=(newProject)=>{
   const projectWithId={
@@ -225,7 +210,7 @@ const handleAddProject=(newProject)=>{
                     <MainProjectsPage projects={projects} setProjects={setProjects}/>
                   }
                 />
-                <Route path="projects/:id" element={<ProjectDetailPage projects={projects} setProjects={setProjects}/> } />
+                <Route path="/projects/:id" element={<ProjectDetailPage projects={projects} setProjects={setProjects}/> } />
               </Routes>
             </main>
           </div>

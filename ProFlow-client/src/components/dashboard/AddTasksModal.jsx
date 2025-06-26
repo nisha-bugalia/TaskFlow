@@ -16,7 +16,9 @@ const AddTasksModal = ({
   const [title, setTitle] = useState(initialData.title || "");
   const [tag, setTag] = useState(initialData.tag || "");
   const [description, setDescription] = useState(initialData.description || "");
+
   const [userNotFound, setUserNotFound] = useState(false);
+
   const priorityMap = {
     1: "Low",
     2: "Medium",
@@ -45,36 +47,36 @@ const AddTasksModal = ({
       alert(error.message);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/project/create-project",
-        { title, description },
-        {
-          withCredentials: true,
-        }
-      );
-      alert(res.data.message);
-    } catch (error) {
-      alert(error.response.data.message);
-    }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:5000/project/create-project",
+  //       { title, description },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     alert(res.data.message);
+  //   } catch (error) {
+  //     alert(error.response.data.message);
+  //   }
 
-    const updatedProject = {
-      ...initialData,
-      title,
-      description,
-      tag,
-      startDate: new Date().toISOString(),
-dueDate: deadline ? new Date(deadline).toISOString() : null,
-      priority: priorityMap[priorityValue],
-      progress: 0,
-      completedTasks: 0,
-      totalTasks: 0,
-    };
-    onSave(updatedProject);
-    onClose();
-  };
+  //   const updatedProject = {
+  //     ...initialData,
+  //     title,
+  //     description,
+  //     tag,
+  //     startDate: new Date().toISOString(),
+  //     dueDate: new Date(deadline).toISOString(),
+  //     priority: priorityMap[priorityValue],
+  //     progress: 0,
+  //     completedTasks: 0,
+  //     totalTasks: 0,
+  //   };
+  //   onSave(updatedProject);
+  //   onClose();
+  // };
 
   const addUser = () => {
     console.log(currentMember);
@@ -84,7 +86,12 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
       })
       .then((res) => {
         alert(res.data.message);
-        setMembers([...members, currentMember]);
+        const member = {
+          id: res.data.id,
+          name: res.data.name,
+          email: res.data.email,
+        };
+        setMembers([...members, member]);
         setCurrentMember(null);
       })
       .catch((error) => {
@@ -96,6 +103,22 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
         }, 250);
         console.log(error?.response?.data?.message || error.message);
       });
+  };
+  //creating the api to handle the project addition in the backend
+  const addProject = (e) => {
+    e.preventDefault()
+    axios.post(
+      "http://localhost:5000/project/save-project",
+      {
+        members,
+        title,
+        description,
+        priority:priorityMap[priorityValue],
+      },
+      {
+        withCredentials: true,
+      }
+    ).then(res=>alert(res.data.message)).catch(err=>console.log(err));
   };
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -192,8 +215,6 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
       </div>
     );
   };
-
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-[1000]">
       {imageAdd && <DragDrop />}
@@ -211,7 +232,7 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
           <h2 className="text-2xl font-semibold mb-4">
             {isEdit ? "Edit Project" : "Create Project"}
           </h2>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={addProject} className="flex flex-col gap-4">
             <input
               type="text"
               placeholder="Project title"
@@ -221,25 +242,26 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
             />
             {/* <input
               type="text"
-              placeholder="Task tag"
+              placeholder="project tag"
               className="border border-gray-300 rounded p-2"
               value={tag}
               onChange={(e) => setTag(e.target.value)}
             /> */}
-            {/* <textarea
-              placeholder="Task description"
+            <textarea
+              placeholder="Project description"
               className="border border-gray-300 rounded p-2 h-24"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></textarea> */}
+            ></textarea>
             <div className="flex gap-4">
-              {/* <input
+              <input
                 type="date"
                 className="border border-gray-300 rounded p-2 flex-1"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-              /> */}
-              {/* <div className=" flex items-center justify-center">
+              />
+
+              <div className=" flex items-center justify-center">
                 <input
                   type="text"
                   placeholder="Assign to"
@@ -260,22 +282,21 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
                 <div className=" p-2 cursor-pointer" onClick={addUser}>
                   <BiPlus></BiPlus>
                 </div>
-              </div> */}
-              {/* {members.map((member) => (
-                <div
-                  onClick={() => {
-                    removeMember(member);
-                  }}
-                  className=" cursor-pointer"
-                >
-                  {" "}
-                  {member}
-                </div>
-              ))} */}
+              </div>
             </div>
+            {members.map((member) => (
+              <div
+                onClick={() => {
+                  removeMember(member);
+                }}
+                className="cursor-pointer"
+              >
+                {member.name}
+              </div>
+            ))}
 
             <div className="mt-4">
-              {/* <label className="block font-medium text-sm mb-2">
+              <label className="block font-medium text-sm mb-2">
                 Priority:
               </label>
               <input
@@ -286,9 +307,9 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
                 value={priorityValue}
                 onChange={(e) => setPriorityValue(Number(e.target.value))}
                 className="w-full accent-purple-700"
-              /> */}
+              />
 
-              {/* <div className="flex justify-between text-xs mt-1 text-gray-600 font-medium">
+              <div className="flex justify-between text-xs mt-1 text-gray-600 font-medium">
                 <span
                   className={
                     priorityValue === 1 ? "text-green-600 font-bold" : ""
@@ -317,10 +338,10 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
                 >
                   Critical
                 </span>
-              </div> */}
+              </div>
             </div>
 
-            <div
+            {/* <div
               className="p-2 border w-fit rounded-full cursor-pointer mt-2 
                   bg-gray-100 hover:bg-gray-200 text-black"
               onClick={() => {
@@ -328,7 +349,7 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
               }}
             >
               <ImImage />
-            </div>
+            </div> */}
 
             <button
               type="submit"
@@ -338,8 +359,7 @@ dueDate: deadline ? new Date(deadline).toISOString() : null,
             </button>
           </form>
         </div>
-
-        </div>
+      </div>
     </div>
   );
 };
