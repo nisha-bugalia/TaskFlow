@@ -16,11 +16,7 @@ const AddTasksModal = ({
   const [title, setTitle] = useState(initialData.title || "");
   const [tag, setTag] = useState(initialData.tag || "");
   const [description, setDescription] = useState(initialData.description || "");
-<<<<<<< HEAD
   const [userNotFound, setUserNotFound] = useState(false);
-=======
-const [userNotFound,setUserNotFound]=useState(false);
->>>>>>> 18ae2214d17deac42d8d87f43a3d428d8f8d18ea
   const priorityMap = {
     1: "Low",
     2: "Medium",
@@ -70,7 +66,7 @@ const [userNotFound,setUserNotFound]=useState(false);
       description,
       tag,
       startDate: new Date().toISOString(),
-      dueDate: new Date(deadline).toISOString(),
+dueDate: deadline ? new Date(deadline).toISOString() : null,
       priority: priorityMap[priorityValue],
       progress: 0,
       completedTasks: 0,
@@ -90,7 +86,6 @@ const [userNotFound,setUserNotFound]=useState(false);
         alert(res.data.message);
         setMembers([...members, currentMember]);
         setCurrentMember(null);
-<<<<<<< HEAD
       })
       .catch((error) => {
         if (error.status === 404) {
@@ -101,18 +96,6 @@ const [userNotFound,setUserNotFound]=useState(false);
         }, 250);
         console.log(error?.response?.data?.message || error.message);
       });
-=======
-        
-      })
-      .catch((error) => {
-        if(error.status===404){
-          setUserNotFound(true);
-        }
-        setTimeout(()=>{
-          setUserNotFound(false)
-        },250)
-       console.log(error?.response?.data?.message||error.message);});
->>>>>>> 18ae2214d17deac42d8d87f43a3d428d8f8d18ea
   };
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -231,7 +214,7 @@ const [userNotFound,setUserNotFound]=useState(false);
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
-              placeholder="Task title"
+              placeholder="Project title"
               className="border border-gray-300 rounded p-2"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -255,20 +238,14 @@ const [userNotFound,setUserNotFound]=useState(false);
                 className="border border-gray-300 rounded p-2 flex-1"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-<<<<<<< HEAD
               /> */}
               {/* <div className=" flex items-center justify-center">
-=======
-              />
-              <div className=" flex items-center justify-center">
->>>>>>> 18ae2214d17deac42d8d87f43a3d428d8f8d18ea
                 <input
                   type="text"
                   placeholder="Assign to"
                   value={currentMember || ""}
                   onChange={(e) => setCurrentMember(e.target.value)}
                   className="border rounded p-2 flex-1 "
-<<<<<<< HEAD
                   style={{
                     borderStyle: "solid", // required
 
@@ -278,20 +255,11 @@ const [userNotFound,setUserNotFound]=useState(false);
                       : "white",
                     color: userNotFound ? "rgba(255,0,0)" : "black",
                     transition: "all 0.3s ease",
-=======
-                  style={ {   borderStyle: "solid",  // required
-  
-  borderColor: userNotFound ? "red" : "gray",
-  backgroundColor:userNotFound ? "rgba(255,0,0,0.1)" : "white",
-  color:userNotFound ? "rgba(255,0,0)" : "black",
-  transition: "all 0.3s ease",
->>>>>>> 18ae2214d17deac42d8d87f43a3d428d8f8d18ea
                   }}
                 />
                 <div className=" p-2 cursor-pointer" onClick={addUser}>
                   <BiPlus></BiPlus>
                 </div>
-<<<<<<< HEAD
               </div> */}
               {/* {members.map((member) => (
                 <div
@@ -304,16 +272,10 @@ const [userNotFound,setUserNotFound]=useState(false);
                   {member}
                 </div>
               ))} */}
-=======
-              </div>
-              {members.map((member) => (
-                <div onClick={()=>{removeMember(member)}} className=" cursor-pointer"> {member}</div>
-              ))}
->>>>>>> 18ae2214d17deac42d8d87f43a3d428d8f8d18ea
             </div>
 
             <div className="mt-4">
-              <label className="block font-medium text-sm mb-2">
+              {/* <label className="block font-medium text-sm mb-2">
                 Priority:
               </label>
               <input
@@ -324,9 +286,9 @@ const [userNotFound,setUserNotFound]=useState(false);
                 value={priorityValue}
                 onChange={(e) => setPriorityValue(Number(e.target.value))}
                 className="w-full accent-purple-700"
-              />
+              /> */}
 
-              <div className="flex justify-between text-xs mt-1 text-gray-600 font-medium">
+              {/* <div className="flex justify-between text-xs mt-1 text-gray-600 font-medium">
                 <span
                   className={
                     priorityValue === 1 ? "text-green-600 font-bold" : ""
@@ -355,7 +317,7 @@ const [userNotFound,setUserNotFound]=useState(false);
                 >
                   Critical
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div
