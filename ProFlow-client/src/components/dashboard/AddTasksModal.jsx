@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GiCancel } from "react-icons/gi";
+import { GiCancel, GiDuel } from "react-icons/gi";
 import { BiPlus } from "react-icons/bi";
 import { ImImage } from "react-icons/im";
 import { useRef } from "react";
@@ -105,6 +105,22 @@ const AddTasksModal = ({
       });
   };
   //creating the api to handle the project addition in the backend
+   const handleEdit = (e) => {
+    e.preventDefault()
+    axios.post(
+      "http://localhost:5000/project/edit",
+      {
+        members,
+        title,
+        description,
+        priority:priorityMap[priorityValue],
+        endDate:deadline
+      },
+      {
+        withCredentials: true,
+      }
+    ).then(res=>alert(res.data.message)).catch(err=>console.log(err));
+  };
   const addProject = (e) => {
     e.preventDefault()
     axios.post(
@@ -114,6 +130,7 @@ const AddTasksModal = ({
         title,
         description,
         priority:priorityMap[priorityValue],
+        endDate:deadline
       },
       {
         withCredentials: true,
@@ -232,7 +249,7 @@ const AddTasksModal = ({
           <h2 className="text-2xl font-semibold mb-4">
             {isEdit ? "Edit Project" : "Create Project"}
           </h2>
-          <form onSubmit={addProject} className="flex flex-col gap-4">
+          <form onSubmit={isEdit?handleEdit:addProject} className="flex flex-col gap-4">
             <input
               type="text"
               placeholder="Project title"

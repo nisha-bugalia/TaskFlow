@@ -102,5 +102,29 @@ router.delete("/:id", verifyIdentity, async (req, res) => {
     });
   }
 });
-
+//to edit the project
+router.post("/edit", async (req, res) => {
+  try {
+    const { projectId, description,title,endDate,priority } = req.body;
+    console.log(projectId)
+    const project = await Project.findByIdAndUpdate(
+       projectId ,
+      { description,priority,endDate,title,projectId},
+      {new:true}
+    );
+    console.log(project);
+   
+    res.status(200).json({ message: "Project Updated Successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal Server Error",
+      });
+  }
+});
+//
 module.exports = router;

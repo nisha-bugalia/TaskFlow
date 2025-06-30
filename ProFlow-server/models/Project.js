@@ -36,7 +36,7 @@ const projectSchema = new mongoose.Schema(
       default: Date.now,
     },
 
-    exEndDate: {
+    endDate: {
       type: Date,
     },
 

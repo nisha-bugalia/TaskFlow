@@ -97,7 +97,7 @@ const ProjectViewToggle = ({projectId,preTasks}) => {
                         >
                           <InlineTaskComposer
                             status={status}
-                            projectId
+                            projectId={projectId}
                             onCreate={handleCreateTask}
                             onClose={() => setActiveComposer(null)}
                           />
@@ -164,7 +164,7 @@ const ProjectViewToggle = ({projectId,preTasks}) => {
                         >
                           <InlineTaskComposer
                             status={status}
-                            projectId
+                            projectId={projectId}
                             onCreate={handleCreateTask}
                             onClose={() => setActiveComposer(null)}
                           />
