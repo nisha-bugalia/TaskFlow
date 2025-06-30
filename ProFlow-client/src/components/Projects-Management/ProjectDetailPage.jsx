@@ -34,9 +34,10 @@ function ProjectDetailPage() {
     );
   }
   useEffect(() => {
+    console.log(project._id)
     axios.post(
       "http://localhost:5000/task/get-tasks",
-      { projectID: project._id })
+      { projectId: project._id })
         .then((res) => {
           setTasks(res.data.tasks);
           console.log(res.data.message);
@@ -57,9 +58,10 @@ function ProjectDetailPage() {
           <Project_TasksSummary />
           <ProjectSummary
             description={project.description}
-            dueDate={project.dueDate}
+            dueDate={project.endDate}
             priority={project.priority}
             status={project.status}
+            projectId={project._id}
             onEdit={() => setIsEditOpen(true)}
           />
         </>

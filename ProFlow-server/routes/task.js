@@ -8,7 +8,7 @@ router.post("/create-task", async (req, res) => {
     const {
       title,
       description,
-      projecId,
+      projectId,
       status,
     //   assignee,
       priority,
@@ -17,7 +17,7 @@ router.post("/create-task", async (req, res) => {
     const task = new Task({
      title,
       description,
-      projecId,
+      projectId,
       status,
       endDate,
     //   assignee,

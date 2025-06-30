@@ -102,6 +102,7 @@ function MainProjectsPage({ projects, setProjects }) {
       {showAddTaskModal && (
         <AddTasksModal
           isEdit={!!editProject}
+         
           initialData={editProject || {}}
           onClose={() => {
             setShowAddTaskModal(false);
