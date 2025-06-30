@@ -32,9 +32,8 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
   };
 
   const handleCardClick = (e) => {
-    // Prevents navigating if click came from inside the menu
-    if (menuRef.current && menuRef.current.contains(e.target)) return;
-    navigate(`/projects/${project._id}`, { state: project });
+    e.preventDefault();
+    navigate(`/project`, { state: project });
   };
 
   return (
@@ -44,7 +43,9 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
     >
       <div className="absolute top-2 left-3 flex gap-x-2">
         <div
-          className={`flex items-center gap-x-1 text-white text-xs border px-3 py-1 rounded-lg ${priorityColors[project.priority]}`}
+          className={`flex items-center gap-x-1 text-white text-xs border px-3 py-1 rounded-lg ${
+            priorityColors[project.priority]
+          }`}
         >
           <TbFlag fontSize={15} /> {project.priority}
         </div>
@@ -67,7 +68,7 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
               <li>
                 <Link
-                  to={`/projects/${project._id}`}
+                  to={`/project`}
                   state={project}
                   className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition"
                   onClick={(e) => e.stopPropagation()}

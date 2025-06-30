@@ -210,7 +210,7 @@ const handleAddProject=(newProject)=>{
                     <MainProjectsPage projects={projects} setProjects={setProjects}/>
                   }
                 />
-                <Route path="/projects/:id" element={<ProjectDetailPage projects={projects} setProjects={setProjects}/> } />
+                <Route path="/project" element={<ProjectDetailPage/> } />
               </Routes>
             </main>
           </div>
