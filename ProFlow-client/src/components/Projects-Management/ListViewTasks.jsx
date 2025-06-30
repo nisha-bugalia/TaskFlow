@@ -1,84 +1,106 @@
-import React from 'react';
+import React, { useState } from "react";
+import TaskDetailModal from "./TaskDetailModal";
+import InlineTaskComposer from "./InlineTaskComposer";
 
-const ListViewTasks = ({ tasks = [], setTasks }) => {
-  const groupBySection = (tasks) => {
-    return tasks.reduce((acc, task) => {
-      const section = task.status || 'To do';
-      if (!acc[section]) acc[section] = [];
-      acc[section].push(task);
-      return acc;
-    }, {});
+const statuses = ["Not Started", "In Progress", "On Hold", "Completed"];
+
+const ListViewTasks = ({ projectId, preTasks }) => {
+  const [tasks, setTasks] = useState(preTasks || []);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeComposer, setActiveComposer] = useState(null); // which section has composer open
+
+  const handleCreateTask = (newTask) => {
+    setTasks((prev) => [...prev, newTask]);
+    setActiveComposer(null);
   };
 
-  const getPriorityBadge = (level) => {
-    const styles = {
-      Low: 'bg-teal-100 text-teal-800',
-      Medium: 'bg-yellow-100 text-yellow-800',
-      High: 'bg-purple-100 text-purple-800',
-      Critical: 'bg-red-800 text-white',
-    };
-    return (
-      <span className={`text-xs px-3 py-1 rounded-full font-medium ${styles[level] || 'bg-gray-200 text-gray-700'}`}>
-        {level}
-      </span>
+  const handleUpdateTask = (updatedTask) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task._id === updatedTask._id ? updatedTask : task
+      )
     );
+    setModalOpen(false);
   };
 
-  const getStatusBadge = (status) => {
-    const styles = {
-      'Not Started': 'bg-gray-200 text-gray-600',
-      'In Progress': 'bg-yellow-100 text-yellow-700',
-      Done: 'bg-green-100 text-green-700',
-    };
-    return (
-      <span className={`text-xs px-3 py-1 rounded-full font-medium ${styles[status] || 'bg-red-100 text-red-700'}`}>
-        {status}
-      </span>
-    );
-  };
-
-  const grouped = groupBySection(tasks);
+  const getTasksByStatus = (status) =>
+    tasks.filter((task) => task.status === status);
 
   return (
-    <div className="p-4 rounded-lg shadow bg-white dark:bg-gray-900 overflow-x-auto mt-2">
-      <div className="flex text-xs font-semibold text-gray-600 dark:text-gray-300 border-b pb-2 mb-3">
-        <div className="w-1/4">Name</div>
-        <div className="w-1/6">Assignee</div>
-        <div className="w-1/6">Due date</div>
-        <div className="w-1/6">Priority</div>
-        <div className="w-1/6">Status</div>
-        <div className="w-1/12 text-center">+</div>
-      </div>
-
-      {Object.keys(grouped).map((section) => (
-        <div key={section} className="mb-6">
-          <div className="text-sm font-bold text-gray-800 dark:text-white mb-2">{section}</div>
-          {grouped[section].map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center text-sm text-gray-700 dark:text-gray-300 py-2 border-b hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+    <div className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm space-y-6">
+      {statuses.map((status) => (
+        <div key={status} className="border-b border-gray-200 pb-4">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
+              {status}
+            </h3>
+            <button
+              onClick={() =>
+                setActiveComposer((prev) => (prev === status ? null : status))
+              }
+              className="text-sm bg-black text-white px-3 py-1.5 rounded-md hover:bg-gray-800 transition"
             >
-              <div className="w-1/4">{task.title}</div>
-              <div className="w-1/6 flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-pink-300 text-white flex items-center justify-center text-xs font-bold">
-                  {task.assignedTo?.[0]?.toUpperCase() || '-'}
+              + Add Task
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {getTasksByStatus(status).map((task) => (
+              <div
+                key={task._id}
+                onClick={() => {
+                  setSelectedTask(task);
+                  setModalOpen(true);
+                }}
+                className="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 cursor-pointer hover:shadow transition"
+              >
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {task.title}
                 </div>
-                {task.assignedTo || '—'}
+                <div className="text-sm text-gray-500 dark:text-gray-400 flex justify-between mt-1">
+                  <span>{task.assignee || "Unassigned"}</span>
+                  <span>
+                    {task.endDate
+                      ? new Date(task.endDate).toLocaleDateString("en-IN", {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : "No due date"}
+                  </span>
+                  {task.priority && (
+                    <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                      {task.priority}
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="w-1/6">
-                {new Date(task.startDate).toLocaleDateString()} –{' '}
-                {new Date(task.dueDate).toLocaleDateString()}
-              </div>
-              <div className="w-1/6">{getPriorityBadge(task.priority)}</div>
-              <div className="w-1/6">{getStatusBadge(task.status)}</div>
-              <div className="w-1/12 text-center text-gray-400">•••</div>
-            </div>
-          ))}
-          <div className="text-sm text-gray-500 pl-1 p-2 cursor-pointer hover:bg-gray-100">
-            + Add task...
+            ))}
+
+            {activeComposer === status && (
+              <InlineTaskComposer
+                projectId={projectId}
+                status={status}
+                onCreate={handleCreateTask}
+                onClose={() => setActiveComposer(null)}
+                showStatus={false} // hide status field
+              />
+            )}
           </div>
         </div>
       ))}
+
+      {modalOpen && selectedTask && (
+        <TaskDetailModal
+          task={selectedTask}
+          onClose={() => setModalOpen(false)}
+          onUpdate={handleUpdateTask}
+          onDelete={(taskId) => {
+    setTasks((prev) => prev.filter((task) => task._id !== taskId));
+    setModalOpen(false);
+  }}
+        />
+      )}
     </div>
   );
 };

@@ -115,7 +115,7 @@ function Timeline({ tasks = [] }) {
 
           return (
             <div
-              key={task.id}
+              key={task._id}
               className="absolute h-[2.8rem] flex items-center p-2 z-30 rounded-xl text-white font-medium cursor-pointer"
               style={{
                 backgroundColor: colors[Math.floor(Math.random() * colors.length)],

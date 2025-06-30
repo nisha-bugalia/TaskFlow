@@ -8,7 +8,7 @@ import axios from "axios";
 const AddTasksModal = ({
   onClose,
   onSave,
-  isEdit = false,
+  isEdit = false, 
   initialData = {},
 }) => {
   const [currentMember, setCurrentMember] = useState(null);
@@ -106,37 +106,69 @@ const AddTasksModal = ({
   };
   //creating the api to handle the project addition in the backend
    const handleEdit = (e) => {
-    e.preventDefault()
-    axios.post(
+  e.preventDefault();
+  axios
+    .post(
       "http://localhost:5000/project/edit",
       {
+        projectId: initialData._id,
         members,
         title,
         description,
-        priority:priorityMap[priorityValue],
-        endDate:deadline
+        priority: priorityMap[priorityValue],
+        endDate: deadline,
+        id: initialData._id,
       },
       {
         withCredentials: true,
       }
-    ).then(res=>alert(res.data.message)).catch(err=>console.log(err));
-  };
+    )
+    .then((res) => {
+      alert(res.data.message);
+
+      const updatedProject = {
+        ...initialData,
+        title,
+        description,
+        priority: priorityMap[priorityValue],
+        dueDate: deadline,
+        members,
+      };
+
+      onSave(updatedProject); 
+      onClose(); 
+    })
+    .catch((err) => console.log(err));
+};
+
   const addProject = (e) => {
-    e.preventDefault()
-    axios.post(
-      "http://localhost:5000/project/save-project",
-      {
-        members,
-        title,
-        description,
-        priority:priorityMap[priorityValue],
-        endDate:deadline
-      },
-      {
-        withCredentials: true,
-      }
-    ).then(res=>alert(res.data.message)).catch(err=>console.log(err));
-  };
+  e.preventDefault();
+  axios.post(
+    "http://localhost:5000/project/save-project",
+    {
+      members,
+      title,
+      description,
+      priority: priorityMap[priorityValue],
+      endDate: deadline
+    },
+    { withCredentials: true }
+  ).then(res => {
+    alert(res.data.message);
+
+    const createdProject = {
+      title,
+      description,
+      priority: priorityMap[priorityValue],
+      dueDate: deadline,
+      members,
+    };
+
+    onSave(createdProject);
+    onClose();
+  }).catch(err => console.log(err));
+};
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {

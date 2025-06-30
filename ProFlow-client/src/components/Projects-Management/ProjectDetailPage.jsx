@@ -74,7 +74,7 @@ function ProjectDetailPage() {
           onSave={handleSave}
         />
       )}
-      {activeTab == "List" && <ListViewTasks tasks={tasks} />}
+      {activeTab == "List" && <ListViewTasks projectId={project._id} preTasks={tasks} />}
 
       {activeTab == "Board" && <ProjectViewToggle projectId={project._id} preTasks={tasks} />}
       {activeTab == "Timeline" && <Timeline tasks={tasks} />}

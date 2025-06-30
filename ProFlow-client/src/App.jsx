@@ -174,7 +174,7 @@ const handleAddProject=(newProject)=>{
        <h2>🧠 Task Sorter using C++ + WebAssembly + React</h2>
       <pre>{output}</pre>  */}
 
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false}  />
      {/* If NOT login/signup page, show sidebar + navbar */}
       {!isAuthRoute && (
         <div className="flex">

@@ -13,7 +13,7 @@ function MainProjectsPage({ projects, setProjects }) {
       withCredentials: true,
     })
     .then((res) => {
-      setProjects(res.data.projects); // ✅ now updates AppContent state
+      setProjects(res.data.projects); // Set the projects state with the fetched data
     })
     .catch((error) => console.log(error));
   }, []);
@@ -65,7 +65,7 @@ function MainProjectsPage({ projects, setProjects }) {
   const [editProject, setEditProject] = useState(null);
 
   const handleAddOrUpdateProject = (newProject) => {
-  const exists = projects.find((p) => p._id === newProject._id); // ✅ Use _id
+  const exists = projects.find((p) => p._id === newProject._id); 
   if (exists) {
     const updated = projects.map((p) =>
       p._id === newProject._id ? newProject : p

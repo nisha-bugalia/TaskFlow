@@ -56,7 +56,7 @@ const TasksThisWeekCard = ({ tasks }) => {
 
             return (
               <li
-                key={task.id}
+                key={task._id}
                 className="border-b flex justify-between items-center bg-zinc-50 dark:bg-zinc-800 p-2 rounded-md hover:shadow hover:border hover:border-gray-300 transition"
               >
                 <div>

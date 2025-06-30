@@ -42,15 +42,14 @@ const InlineTaskComposer = ({ projectId, status, onCreate, onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showCalendar]);
 
-  // ✅ Detect outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (composerRef.current && !composerRef.current.contains(e.target)) {
         const isEmpty = !title.trim() && !priority && !assignee && !dueDate;
         if (isEmpty) {
-          onClose(); // ✅ close silently
+          onClose(); 
         } else {
-          handleSubmit(); // ✅ add task
+          handleSubmit(); 
         }
       }
     };

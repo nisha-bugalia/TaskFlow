@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { FiX, FiCalendar, FiUser, FiEdit2 } from 'react-icons/fi';
-import { format } from 'date-fns';
+import { toast } from "react-hot-toast";
+import { FiX, FiCalendar, FiUser, FiEdit2, FiTrash } from "react-icons/fi";
+import axios from "axios"; // add this if not already
+import { useState } from "react";
+import { Dialog } from "@headlessui/react";
 
-const TaskDetailModal = ({ task, onClose, onUpdate }) => {
+const TaskDetailModal = ({ task, onClose, onUpdate, onDelete }) => {
   const [title, setTitle] = useState(task.title || '');
   const [assignee, setAssignee] = useState(task.assignee || '');
   const [dueDate, setDueDate] = useState(task.dueDate || '');
@@ -38,17 +39,57 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
     setComment('');
   };
 
+const handleDeleteTask = () => {
+  toast((t) => (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-1">
+        <FiTrash className="text-red-500" />
+        <span className="font-medium">Are you sure you want to DELETE?</span>
+      </div>
+      <div className="flex justify-end gap-2">
+        <button
+          className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded"
+          onClick={() => toast.dismiss(t.id)}
+        >
+          Cancel
+        </button>
+        <button
+          className="px-3 py-1 text-sm bg-red-600 text-white hover:bg-red-700 rounded"
+          onClick={() => {
+            toast.dismiss(t.id);
+            toast.success("Task deleted");
+            onDelete(task._id);   
+              onClose();
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ), { duration: 5000 });
+};
+
+
   return (
-    <Dialog open={true} onClose={onClose} className="fixed inset-0 z-[10000] flex items-center justify-center">
+    <Dialog open={true} onClose={onClose} className="fixed inset-0 z-[8000] flex items-center justify-center">
       <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
       <div className="bg-white dark:bg-gray-900 max-w-4xl w-full rounded-lg shadow-lg overflow-hidden relative z-50 flex">
         
         <div className="flex-1 p-6 space-y-4">
-          <input
-            className="text-xl pb-2 font-semibold w-full border-b focus:outline-none bg-transparent dark:text-white"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <div className="flex justify-between items-start">
+            <input
+              className="text-xl pb-2 font-semibold w-full border-b focus:outline-none bg-transparent dark:text-white"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <button
+              onClick={handleDeleteTask}
+              className="text-red-600 hover:text-red-700 p-2"
+              title="Delete Task"
+            >
+              <FiTrash />
+            </button>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center gap-2">
@@ -90,7 +131,8 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
               >
                 <option>Not Started</option>
                 <option>In Progress</option>
-                <option>Done</option>
+                <option>On Hold</option>
+                <option>Completed</option>
               </select>
             </div>
           </div>
@@ -106,7 +148,6 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
             />
           </div>
 
-          {/* Save Button */}
           <div className="text-right">
             <button
               onClick={handleSave}
@@ -117,7 +158,7 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
           </div>
         </div>
 
-        {/* Comments Section */}
+        {/* Comments */}
         <div className="w-[280px] m-2 border rounded-lg bg-gray-50 dark:bg-gray-800 p-4 flex flex-col justify-between">
           <h4 className="text-base font-semibold text-gray-800 dark:text-white mb-2">Comments</h4>
           <div className="flex-1 space-y-2 overflow-y-auto mb-3">
@@ -144,7 +185,6 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
           </div>
         </div>
 
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-2 right-2 p-2 text-gray-500 hover:text-black"
@@ -155,5 +195,4 @@ const TaskDetailModal = ({ task, onClose, onUpdate }) => {
     </Dialog>
   );
 };
-
 export default TaskDetailModal;
