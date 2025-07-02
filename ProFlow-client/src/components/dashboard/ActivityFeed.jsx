@@ -11,44 +11,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-const dummyActivities = [
-  {
-    id: 1,
-    user: "",
-    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxKH-GHG7GKA11hkYH9--j0OynoGFFVsMZjw&s",
-    action: "completed",
-    target: "Build Login API",
-    targetType: "task",
-    time: dayjs().subtract(5, "minute").toISOString(),
-  },
-  {
-    id: 2,
-    user: "Raj Gupta",
-    avatar: "https://i.pravatar.cc/150?img=8",
-    action: "commented",
-    target: "Refactor Redux Store",
-    targetType: "task",
-    time: dayjs().subtract(1, "hour").toISOString(),
-  },
-  {
-    id: 3,
-    user: "Anjali Yadav",
-    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbq2JCrkV7jZseomcP3HFmXGPbwPKaoI8HLA&s",
-    action: "created",
-    target: "Marketing Website Revamp",
-    targetType: "project",
-    time: dayjs().subtract(2, "day").toISOString(),
-  },
-  {
-    id: 4,
-    user: "Soham Roy",
-    avatar: "https://i.pravatar.cc/150?img=6",
-    action: "assigned",
-    target: "Design Dashboard UI",
-    targetType: "task",
-    time: dayjs().subtract(3, "day").toISOString(),
-  },
-];
+
 
 const getIcon = (action) => {
   switch (action) {
@@ -75,30 +38,7 @@ const ActivityFeed = () => {
       </h3>
 
       <ul className="space-y-5">
-        {dummyActivities.map((activity) => (
-          <li key={activity.id} className="flex gap-4 items-start">
-            <img
-              src={activity.avatar}
-              alt={activity.user}
-              className="w-10 h-10 rounded-full border border-zinc-300 dark:border-zinc-700"
-            />
-            <div className="flex-1">
-              <p className="text-base text-zinc-700 dark:text-zinc-200">
-                <span className="font-medium">{activity.user}</span> {activity.action}{" "}
-                {activity.targetType === "task" ? (
-                  <span className="font-semibold text-indigo-500">task</span>
-                ) : (
-                  <span className="font-semibold text-pink-500">project</span>
-                )}{" "}
-                <span className="italic">"{activity.target}"</span>
-              </p>
-              <p className="text-xs text-zinc-500 mt-1">
-                {dayjs(activity.time).fromNow()}
-              </p>
-            </div>
-            <div className="mt-1">{getIcon(activity.action)}</div>
-          </li>
-        ))}
+      
       </ul>
 
       <div className="mt-4 text-center">

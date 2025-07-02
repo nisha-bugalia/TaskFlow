@@ -3,14 +3,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 import { format } from "date-fns";
-import axios from "axios"
+import axios from "axios";
 const InlineTaskComposer = ({ projectId, status, onCreate, onClose }) => {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
   const [assignee, setAssignee] = useState("");
   const [dueDate, setDueDate] = useState("");
   const iconRef = useRef(null);
- 
+
   const composerRef = useRef();
 
   const [showCalendar, setShowCalendar] = useState(false);
@@ -47,9 +47,9 @@ const InlineTaskComposer = ({ projectId, status, onCreate, onClose }) => {
       if (composerRef.current && !composerRef.current.contains(e.target)) {
         const isEmpty = !title.trim() && !priority && !assignee && !dueDate;
         if (isEmpty) {
-          onClose(); 
+          onClose();
         } else {
-          handleSubmit(); 
+          handleSubmit();
         }
       }
     };
@@ -59,7 +59,7 @@ const InlineTaskComposer = ({ projectId, status, onCreate, onClose }) => {
 
   const handleSubmit = () => {
     if (!title.trim()) return; // avoid adding blank title
-console.log(status);
+    console.log(status);
     // ✅ send to parent
     axios
       .post("http://localhost:5000/task/create-task", {
@@ -67,11 +67,10 @@ console.log(status);
         title,
         priority,
         assignee,
-        endDate:dueDate,
+        endDate: dueDate,
         status,
       })
       .then((res) => {
-
         console.log(res.data.message);
         onCreate(res.data.data);
       })
@@ -79,7 +78,33 @@ console.log(status);
         console.log(error.response.data.message);
       });
   };
-
+  const [available, setAvailable] = useState(false);
+  const [timeoutFunc, setTimeoutFunc] = useState(null);
+  const check_user = (username) => {
+    axios
+      .get(`http://localhost:5000/user/check-username?name=${username}`)
+      .then((res) => {
+        console.log(res.data.available);
+        if (!res.data.available) {
+          setAvailable(true);
+        } else {
+          setAvailable(false);
+        }
+      });
+  };
+  const handleAssigne = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    if (timeoutFunc) {
+      clearTimeout(timeoutFunc);
+    }
+    const timeout = setTimeout(() => {
+      if (value.length > 2) {
+        check_user(value);
+      }
+    }, 500);
+    setTimeoutFunc(timeout);
+  };
   return (
     <div
       ref={composerRef}
@@ -110,8 +135,19 @@ console.log(status);
         <input
           type="text"
           placeholder="Assignee"
-          value={assignee}
-          onChange={(e) => setAssignee(e.target.value)}
+          value={assignee.toLowerCase()}
+          onChange={(e) => {
+            setAssignee(e.target.value);
+            handleAssigne(e);
+          }}
+          style={{
+            borderColor: available
+              ? "green"
+              : assignee.length > 2
+              ? "red"
+              : "grey",
+            outline: "none",
+          }}
           className="p-1 rounded bg-white border border-gray-200 w-1/2"
         />
         <div className="relative w-auto">
@@ -137,7 +173,7 @@ console.log(status);
               <DatePicker
                 selected={dueDate}
                 onChange={(date) => {
-                  setDueDate(date); 
+                  setDueDate(date);
                   setShowCalendar(false);
                 }}
                 inline

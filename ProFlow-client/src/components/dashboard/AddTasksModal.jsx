@@ -310,28 +310,7 @@ const AddTasksModal = ({
                 onChange={(e) => setDeadline(e.target.value)}
               />
 
-              <div className=" flex items-center justify-center">
-                <input
-                  type="text"
-                  placeholder="Assign to"
-                  value={currentMember || ""}
-                  onChange={(e) => setCurrentMember(e.target.value)}
-                  className="border rounded p-2 flex-1 "
-                  style={{
-                    borderStyle: "solid", // required
-
-                    borderColor: userNotFound ? "red" : "gray",
-                    backgroundColor: userNotFound
-                      ? "rgba(255,0,0,0.1)"
-                      : "white",
-                    color: userNotFound ? "rgba(255,0,0)" : "black",
-                    transition: "all 0.3s ease",
-                  }}
-                />
-                <div className=" p-2 cursor-pointer" onClick={addUser}>
-                  <BiPlus></BiPlus>
-                </div>
-              </div>
+              
             </div>
             {members.map((member) => (
               <div

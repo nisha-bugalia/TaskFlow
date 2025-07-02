@@ -8,22 +8,23 @@ const User = require("../models/User");
 //to create a task
 router.post("/create-task", async (req, res) => {
   try {
-    const {
+    let {
       title,
       description,
       projectId,
       status,
-    //   assignee,
+      assignee,
       priority,
       endDate
     } = req.body;
+    assignee=await User.findOne({username:assignee})
     const task = new Task({
      title,
       description,
       projectId,
       status,
       endDate,
-    //   assignee,
+      assignee:assignee._id,
       priority,
     });
     await task.save();

@@ -152,6 +152,7 @@ const navigate=useNavigate()
 
         <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
       </div>
+      <div className="m-3 cursor-pointer text-gray-600 " onClick={()=>navigate("/login")}>Skip</div>
     </div>
   );
 }

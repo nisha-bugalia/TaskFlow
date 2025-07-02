@@ -119,7 +119,7 @@ router.post("/verify-email", (req, res) => {
 //to Sign up the User:-
 router.post("/signup", async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { fullName,username, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
@@ -129,6 +129,7 @@ router.post("/signup", async (req, res) => {
 
     const newUser = new User({
       fullName,
+      username:username.toLowerCase(),
       email,
       password: hashedPassword,
       emailToken: token,
@@ -169,13 +170,14 @@ router.post("/login", async (req, res) => {
         sameSite: "Strict",
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .json({ message: "Let's Dive into the Proflow Setup",
-         user: {
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email
-    }
-       });
+      .json({
+        message: "Let's Dive into the Proflow Setup",
+        user: {
+          id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+        },
+      });
   } catch (err) {
     console.error(err);
 
@@ -184,5 +186,48 @@ router.post("/login", async (req, res) => {
     });
   }
 });
-
+//to check the availability of the username
+router.get("/check-username", async (req, res) => {
+  try {
+    const username = req.query.name?.toLowerCase();
+    if (!username || username.length < 3) {
+      return res
+        .status(400)
+        .json({ available: false, message: "Invalid username" });
+    }
+    console.log(username)
+    const userExists = await User.findOne({ username });
+    console.log(userExists)
+    res.json({ available: userExists===null });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal Server Error",
+      });
+  }
+});
+//to get the user by id
+router.get("/get-user",async(req,res)=>{
+  try{
+ 
+    const userId=req.query.id;
+       console.log(userId);
+    if(!userId){
+      return res.status(400).json({message:"Please give the Username"})
+    }
+    const user=await User.findById(userId);
+    if(!user){
+      return res.status(404).json({message:"No User Found"});
+    }
+    console.log(user)
+    return res.json({user})
+  }
+  catch(error){
+    console.log(error.message)
+  }
+})
 module.exports = router;

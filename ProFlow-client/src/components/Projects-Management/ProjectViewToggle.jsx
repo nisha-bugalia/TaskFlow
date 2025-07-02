@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FiCalendar } from "react-icons/fi";
 import InlineTaskComposer from "./InlineTaskComposer";
@@ -9,10 +9,8 @@ const statusColors = {
   "Not Started": "bg-red-50 border border-red-300",
   "In Progress": "bg-blue-50 border border-blue-200",
   "On Hold": "bg-yellow-50 border border-yellow-200",
-  "Completed": "bg-green-50 border border-green-200",
+  Completed: "bg-green-50 border border-green-200",
 };
-
-
 
 const ProjectViewToggle = ({ projectId, preTasks }) => {
   const [tasks, setTasks] = useState(preTasks);
@@ -52,6 +50,32 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
       composerRefs.current[status]?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
+  const [show, setShow] = useState(false);
+  const showUsername = async () => {
+    const updatedTasks = await Promise.all(
+      tasks.map(async (task) => {
+        try {
+          const res = await axios.get(
+            `http://localhost:5000/user/get-user?id=${task.assignee}`
+          );
+          return {
+            ...task,
+            assignee: res.data.user.username, // Replace ID with username
+          };
+        } catch (error) {
+          alert(error.response?.data?.message || "Error fetching username");
+          return task; // fallback: return the original task
+        }
+      })
+    );
+
+    setTasks(updatedTasks);
+    setShow(true);
+  };
+
+  useEffect(() => {
+    showUsername();
+  }, [tasks, show]);
 
   const handleGlobalAddTask = () => {
     setActiveComposer("Not Started");
@@ -107,59 +131,60 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
                           </div>
                         )}
 
-                        {getStatusColumn(status).map((task, index) => (
-                          <Draggable
-                            draggableId={task._id}
-                            index={index}
-                            key={task._id}
-                          >
-                            {(provided) => (
-                              <div
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                                onClick={() => {
-                                  console.log("task clicked");
-                                  setSelectedTask(task);
-                                  setModalOpen(true);
-                                }}
-                                className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 hover:shadow-sm transition duration-200 transform hover:scale-[1.01] cursor-pointer"
-
-                              >
-                                <h4 className="font-semibold text-gray-800 dark:text-white mb-2">
-                                  {task.title}
-                                </h4>
-                                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                                  <span className="flex items-center gap-1">
-                                    <FiCalendar />
-                                    {task.endDate
-                                      ? new Date(
-                                          task.endDate
-                                        ).toLocaleDateString("en-IN", {
-                                          month: "short",
-                                          day: "numeric",
-                                        })
-                                      : "No Date"}
-                                  </span>
-                                  {task.priority && (
-                                    <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                                      {task.priority}
+                        {show &&
+                          getStatusColumn(status).map((task, index) => (
+                            <Draggable
+                              draggableId={task._id}
+                              index={index}
+                              key={task._id}
+                            >
+                              {(provided) => (
+                                <div
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                  onClick={() => {
+                                    console.log("task clicked");
+                                    setSelectedTask(task);
+                                    setModalOpen(true);
+                                  }}
+                                  className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 hover:shadow-sm transition duration-200 transform hover:scale-[1.01] cursor-pointer"
+                                >
+                                  <h4 className="font-semibold text-gray-800 dark:text-white mb-2">
+                                    {task.title}
+                                  </h4>
+                                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                                    <span className="flex items-center gap-1">
+                                      <FiCalendar />
+                                      {task.endDate
+                                        ? new Date(
+                                            task.endDate
+                                          ).toLocaleDateString("en-IN", {
+                                            month: "short",
+                                            day: "numeric",
+                                          })
+                                        : "No Date"}
                                     </span>
+                                    {task.priority && (
+                                      <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                                        {task.priority}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {task.assignee && (
+                                    <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+                                      Assigned to:
+                                      {console.log(task.assignee[0] + "dfhg")}
+                                      <span className="font-medium">
+                                        {task.assignee}
+                                      </span>
+                                    </div>
                                   )}
                                 </div>
-
-                                {task.assignee && (
-                                  <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                                    Assigned to:{" "}
-                                    <span className="font-medium">
-                                      {task.assignee}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
+                              )}
+                            </Draggable>
+                          ))}
 
                         {!composerAtTop && activeComposer === status && (
                           <div
@@ -205,9 +230,9 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
             setModalOpen(false);
           }}
           onDelete={(taskId) => {
-    setTasks((prev) => prev.filter((task) => task._id !== taskId));
-    setModalOpen(false);
-  }}
+            setTasks((prev) => prev.filter((task) => task._id !== taskId));
+            setModalOpen(false);
+          }}
         />
       )}
     </div>

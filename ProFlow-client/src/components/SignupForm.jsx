@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-
+import { AnimatePresence, motion, time } from "framer-motion";
+import axios from"axios"
 import {
   FaGoogle,
   FaMicrosoft,
@@ -13,18 +13,43 @@ import {
 import Loading from "./Loading";
 
 const SignupForm = () => {
-  const [showLoading,setShowLoading]=useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userDetails, setUserDetails] = useState({
     fullName: "",
     email: "",
+    username: "",
     password: "",
     image: "",
     role: "",
     company: "",
   });
   const navigate = useNavigate();
-
+  const [timeOutFunc, setTimeOutFunc] = useState(null);
+  const [available,setAvailable]=useState(false)
+  const checkUsername = (name) => {
+    axios
+      .get(`http://localhost:5000/user/check-username?name=${name}`)
+      .then((res) => {setAvailable(res.data.available);console.log(res.data.available)})
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  };
+  const handleUserChange = (e) => {
+    const value = e.target.value;
+    setUserDetails({ ...userDetails, username: value });
+    if (timeOutFunc) {
+      clearTimeout(timeOutFunc);
+    }
+    const timeout = setTimeout(() => {
+      if (userDetails.username.length > 2) {
+        checkUsername(value);
+      }else{
+        setAvailable(false)
+      }
+    }, 500);
+    setTimeOutFunc(timeout);
+  };
   const handleSignup = async (e) => {
     setShowLoading(true);
     e.preventDefault();
@@ -74,6 +99,18 @@ const SignupForm = () => {
             placeholder="Enter your email"
             className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
           />
+          <label className="w-full text-sm font-semibold mb-1">Username</label>
+          <input
+            onChange={handleUserChange}
+            type="text"
+            value={userDetails.username.toLowerCase()}
+            placeholder="Enter your username"
+            className="w-full border rounded px-3 py-2 mb-4"
+            style={{borderColor:available?"green":userDetails.username.length>3?"red":"grey",
+              outline:"none"
+            }}
+          />
+
           <label className="w-full max-w-sm text-sm font-semibold mb-1">
             Password
           </label>
