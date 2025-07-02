@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
+const verifyIdentity = require("../middlewares/authMiddleware");
+const Project = require("../models/Project");
+const User = require("../models/User");
 
 //to create a task
 router.post("/create-task", async (req, res) => {
@@ -44,5 +47,24 @@ router.post("/get-tasks", async (req, res) => {
     console.log(err);
   }
 });
+
+//get-all-tasks of all projects of an admin
+router.get("/get-all-tasks", verifyIdentity, async (req, res) => {
+  try {
+    const admin = req.user;
+
+    const projects = await Project.find({ admin: admin._id });
+
+    const projectIds = projects.map((project) => project._id);
+
+    const tasks = await Task.find({ projectId: { $in: projectIds } }).populate("projectId", "title");
+
+    res.status(200).json({ message: "Successfully Sent", tasks });
+  } catch (err) {
+    console.error("Error in get-all-tasks:", err);
+    res.status(500).json({ message: err.message || "Server Error" });
+  }
+});
+
 module.exports = router;
 //

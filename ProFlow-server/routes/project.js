@@ -77,7 +77,7 @@ router.post("/save-project", verifyIdentity, async (req, res) => {
 router.get("/get-projects", verifyIdentity, async (req, res) => {
   try {
     const admin = req.user;
-    const projects = await Project.find({ admin: admin._id });
+    const projects = await Project.find({ admin: admin._id }).populate("admin", "fullName email");
     res.status(200).json({ message: "Successfully Sent", projects });
   } catch (err) {
     console.log(err);

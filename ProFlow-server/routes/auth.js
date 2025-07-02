@@ -169,7 +169,13 @@ router.post("/login", async (req, res) => {
         sameSite: "Strict",
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .json({ message: "Let's Dive into the Proflow Setup" });
+      .json({ message: "Let's Dive into the Proflow Setup",
+         user: {
+      id: user._id,
+      fullName: user.fullName,
+      email: user.email
+    }
+       });
   } catch (err) {
     console.error(err);
 
