@@ -11,7 +11,12 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const TaskStatusChart = ({ tasks }) => {
   const statusCounts = useMemo(() => {
-    const counts = { Done: 0, "In Progress": 0, "Not Started": 0 };
+    const counts = {
+      "Not Started": 0,
+      "In Progress": 0,
+      "On Hold": 0,
+      "Completed": 0,
+    };
     tasks.forEach((task) => {
       if (counts[task.status] !== undefined) {
         counts[task.status]++;
@@ -21,18 +26,19 @@ const TaskStatusChart = ({ tasks }) => {
   }, [tasks]);
 
   const data = {
-    labels: ["Done", "In Progress", "Not Started"],
+    labels: ["Not Started", "In Progress", "On Hold", "Completed"],
     datasets: [
       {
         data: [
-          statusCounts["Done"],
-          statusCounts["In Progress"],
           statusCounts["Not Started"],
+          statusCounts["In Progress"],
+          statusCounts["On Hold"],
+          statusCounts["Completed"],
         ],
-        backgroundColor: ["#10b981", "#3b82f6", "#f59e0b"],
+        backgroundColor: ["#facc15", "#3b82f6", "#f97316", "#10b981"], // Yellow, Blue, Orange, Green
         borderWidth: 4,
         hoverOffset: 8,
-        cutout: "40%", // to make it doughnut
+        cutout: "40%",
       },
     ],
   };
@@ -53,8 +59,6 @@ const TaskStatusChart = ({ tasks }) => {
   return (
     <div className="relative flex items-center justify-center h-full">
       <Doughnut data={data} options={options} />
-
-      {/* Total Tasks Center Label */}
       <div className="absolute text-center text-zinc-700 dark:text-white">
         <p className="text-sm">Total</p>
         <p className="text-xl font-bold">{tasks.length}</p>

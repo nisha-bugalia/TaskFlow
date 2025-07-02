@@ -9,12 +9,12 @@ const TasksThisWeekCard = ({ tasks }) => {
   const today = dayjs().startOf('day');
 
   const filteredTasks = tasks.filter((task) => {
-    const deadline = dayjs(task.dueDate).startOf('day');
+    const deadline = dayjs(task.endDate).startOf('day');
     const status = task.status.toLowerCase();
 
-    if (activeTab === "upcoming") return deadline.isAfter(today) && status !== "done";
-    if (activeTab === "overdue") return deadline.isBefore(today) && status !== "done";
-    if (activeTab === "completed") return status === "done";
+    if (activeTab === "upcoming") return deadline.isAfter(today) && status !== "completed";
+    if (activeTab === "overdue") return deadline.isBefore(today) && status !== "completed";
+    if (activeTab === "completed") return status === "completed";
     return false;
   });
 
@@ -51,7 +51,7 @@ const TasksThisWeekCard = ({ tasks }) => {
           <li className="text-zinc-500 italic">No tasks to show.</li>
         ) : (
           filteredTasks.map((task) => {
-            const deadline = dayjs(task.dueDate).startOf('day');
+            const deadline = dayjs(task.endDate).startOf('day');
             const status = task.status.toLowerCase();
 
             return (
@@ -62,10 +62,10 @@ const TasksThisWeekCard = ({ tasks }) => {
                 <div>
                   <p className="font-medium mb-2 text-base text-zinc-800 dark:text-zinc-100">{task.title}</p>
                   <p className="flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400">
-                    <FaFolder/> {task.project} • <FaCalendar/> {deadline.format("MMM D")}
+                    <FaFolder/> {task.projectId.title} • <FaCalendar/> {deadline.format("MMM D")}
                   </p>
                 </div>
-                {status === "done" ? (
+                {status === "completed" ? (
                   <FiCheckCircle className="text-green-500" fontSize={20} />
                 ) : deadline.isBefore(today) ? (
                   <FiAlertCircle className="text-red-500" fontSize={20}/>

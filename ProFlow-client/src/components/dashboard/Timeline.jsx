@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Timeline({ tasks = [] }) {
+function Timeline({ tasks}) {
   const [timeline, setTimeline] = useState([]);
   const colors = ["#02e075", "#fc034a", "darkorange", "#a103fc", "indigo"];
 
@@ -94,8 +94,8 @@ function Timeline({ tasks = [] }) {
 
       {tasks.map((task) => {
         try {
-          const startDate = new Date(task.startDate);
-          const dueDate = new Date(task.dueDate);
+          const startDate = new Date(task.createdAt);
+          const dueDate = new Date(task.endDate);
           
           if (isNaN(startDate) || isNaN(dueDate)) {
             console.error("Invalid date for task:", task);

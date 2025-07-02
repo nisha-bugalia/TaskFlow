@@ -37,7 +37,7 @@ const AddTasksModal = ({
     initialData.priority ? reversePriorityMap[initialData.priority] : 2
   );
   const [deadline, setDeadline] = useState(
-    initialData.dueDate ? initialData.dueDate.slice(0, 10) : ""
+    initialData.endDate ? initialData.endDate.slice(0, 10) : ""
   );
   const removeMember = (member) => {
     try {
@@ -131,7 +131,7 @@ const AddTasksModal = ({
         title,
         description,
         priority: priorityMap[priorityValue],
-        dueDate: deadline,
+        endDate: deadline,
         members,
       };
 
@@ -160,7 +160,7 @@ const AddTasksModal = ({
       title,
       description,
       priority: priorityMap[priorityValue],
-      dueDate: deadline,
+      endDate: deadline,
       members,
     };
 

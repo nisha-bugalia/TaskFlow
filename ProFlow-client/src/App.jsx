@@ -24,8 +24,11 @@ import ProjectDetailPage from "./components/Projects-Management/ProjectDetailPag
 import { Toaster } from 'react-hot-toast';
 import axios from "axios";
 
+
 function AppContent() {
   const [darkMode, setDarkMode] = useState(false);
+    const location = useLocation();
+
 
   const toggleDarkMode = () => {
     const isDark = !darkMode;
@@ -76,7 +79,6 @@ const handleAddProject=(newProject)=>{
   const navbarMenuRef = useRef(null);
   const taskModalOpenRef = useRef(null);
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const isAuthRoute = location.pathname === "/login" 
@@ -210,7 +212,7 @@ const handleAddProject=(newProject)=>{
                     <MainProjectsPage projects={projects} setProjects={setProjects}/>
                   }
                 />
-                <Route path="/project" element={<ProjectDetailPage/> } />
+                <Route path="/project" element={<ProjectDetailPage key={location.key}/> } />
               </Routes>
             </main>
           </div>

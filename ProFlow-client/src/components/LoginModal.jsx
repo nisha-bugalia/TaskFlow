@@ -24,6 +24,8 @@ const LoginPage = () => {
       })
       .then((res) => {
         if (res.status === 200) {
+          console.log("User returned from backend:", res.data.user.fullName);
+          localStorage.setItem("userName", res.data.user.fullName);
           alert(res.data.message);
           navigate("/dashboard");
         } else {
@@ -61,7 +63,7 @@ const LoginPage = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              class="w-full border border-gray-300 rounded px-3 py-2 pr-10"
+              className="w-full border border-gray-300 rounded px-3 py-2 pr-10"
               value={userDetails.password}
               onChange={(e) => {
                 setUserDetails({ ...userDetails, password: e.target.value });

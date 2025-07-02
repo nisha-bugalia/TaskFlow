@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import moment from "moment";
 import DatePicker from "react-datepicker";
@@ -15,6 +15,7 @@ const ProjectSummarySection = ({
   status,
   onEdit,
   projectId,
+  createdby
 }) => {
   const [isEditingDesc, setIsEditingDesc] = useState(false);
   const [descValue, setDescValue] = useState(description);
@@ -32,7 +33,7 @@ const ProjectSummarySection = ({
       .then((res) => alert(res.data.message))
       .catch((err) => alert(err.response.data.message));
   };
-
+  
   return (
     <div className="flex flex-col md:flex-row gap-6 w-full bg-white dark:bg-gray-900 rounded-lg rounded-t-none   p-6 ">
       {/* Left Panel */}
@@ -94,7 +95,7 @@ const ProjectSummarySection = ({
               Ni
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              Nisha - Project Owner
+              {createdby} - Project Owner
             </p>
           </div>
         </div>

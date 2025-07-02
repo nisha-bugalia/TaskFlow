@@ -6,10 +6,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 
 function TasksPerAssigneeChart ({tasks}) {
+
     const groupedData = useMemo(() => {
         const dataMap = new Map();
         tasks.forEach(task => {
-          const key = task.assignedTo;
+          const key = task.assignedTo || 'unassigned';
           dataMap.set(key, (dataMap.get(key) || 0) + 1);
         });
     

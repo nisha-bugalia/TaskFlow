@@ -9,8 +9,9 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-
+console.log("Incoming project to card:", project);
   useEffect(() => {
+
     const handleClickOutside = (event) => {
       const clickedInsideMenu = menuRef.current?.contains(event.target);
       const clickedMenuButton = event.target.closest("button");

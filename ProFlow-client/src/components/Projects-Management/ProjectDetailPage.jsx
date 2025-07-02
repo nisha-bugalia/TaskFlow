@@ -45,6 +45,7 @@ function ProjectDetailPage() {
         .catch((error) => console.log(error))
     
   }, []);
+
   return (
     <div className="md:ml-[20vw] p-4">
       <ProjectHeader
@@ -63,6 +64,7 @@ function ProjectDetailPage() {
             status={project.status}
             projectId={project._id}
             onEdit={() => setIsEditOpen(true)}
+            createdby={project.admin?.fullName || "Unknown"} 
           />
         </>
       )}

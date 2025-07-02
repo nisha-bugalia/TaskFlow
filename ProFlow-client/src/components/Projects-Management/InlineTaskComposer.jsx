@@ -137,7 +137,7 @@ console.log(status);
               <DatePicker
                 selected={dueDate}
                 onChange={(date) => {
-                  setDueDate(date);
+                  setDueDate(date); 
                   setShowCalendar(false);
                 }}
                 inline

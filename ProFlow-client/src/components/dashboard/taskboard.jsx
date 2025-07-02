@@ -8,10 +8,10 @@ import TaskList from "./TaskList";
 import TaskSummary from "./TaskSummary";
 import Header from "./Header";
 import AddTasksModal from "./AddTasksModal";
-import TaskStatusChart from "./AnalyticCharts/TaskStatusChart";
 import TasksThisWeekCard from "./TasksThisWeekCard ";
 import ChartSection from "./ChartSection";
 import ActivityFeed from "./ActivityFeed";
+import axios from "axios";
 
 function TaskBoard({
   darkMode,
@@ -127,47 +127,47 @@ function TaskBoard({
     }
   };
 
-  const project = {
-    _id: "proj123",
-    name: "Website Redesign",
-    description:
-      "Redesigning the company's main website with modern UI and better UX.",
-    status: "In Progress",
-    startDate: "2025-06-01T00:00:00.000Z",
-    endDate: "2025-06-20T00:00:00.000Z",
-    createdBy: "user001",
-    teamMembers: ["user001", "user002", "user003"],
-    tasks: ["task001", "task002", "task003"],
-    issues: ["issue001", "issue002"],
-    timeline: [
-      {
-        title: "Project Kickoff",
-        date: "2025-06-01T00:00:00.000Z",
-        description: "Initial meeting with stakeholders",
-      },
-      {
-        title: "Design Approval",
-        date: "2025-06-05T00:00:00.000Z",
-        description: "Client approved the UI designs",
-      },
-    ],
-    tags: ["UI", "Frontend", "ClientProject"],
-    priority: "High",
-    progress: 40,
-    isArchived: false,
-    createdAt: "2025-05-30T00:00:00.000Z",
-    updatedAt: "2025-06-06T00:00:00.000Z",
+  const [tasks, setTasks] = useState([]);
+  const[projects, setProjects] = useState([]);
+
+  useEffect(() => {
+  const fetchProjectsAndTasks = async () => {
+    try {
+      const [projectRes, taskRes] = await Promise.all([
+        axios.get("http://localhost:5000/project/get-projects", {
+          withCredentials: true,
+        }),
+        axios.get("http://localhost:5000/task/get-all-tasks", {
+          withCredentials: true,
+        }),
+      ]);
+      setProjects(projectRes.data.projects);
+      setTasks(taskRes.data.tasks); // assuming tasks API returns { tasks: [...] }
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
+    }
   };
 
-  const [tasks, setTasks] = useState([]);
+  fetchProjectsAndTasks();
+}, []);
+
+
+
   const taskSummaryData = {
-    total: tasks.length,
-    completed: tasks.filter((task) => task.status === "Done").length,
-    incomplete: tasks.filter(
-      (task) => task.status !== "Done" && task.status !== "In Progress"
-    ).length,
-    review: tasks.filter((task) => task.status === "In Progress").length,
-  };
+  total: tasks.length,
+  notStarted: tasks.filter((task) => task.status === "Not Started").length,
+  inProgress: tasks.filter((task) => task.status === "In Progress").length,
+  onHold: tasks.filter((task) => task.status === "On Hold").length,
+  completed: tasks.filter((task) => task.status === "Completed").length,
+};
+
+
+const [userName, setUserName] = useState("");
+
+useEffect(() => {
+  const name = localStorage.getItem("userName");
+  if (name) setUserName(name);
+}, []);
 
   const [positions, setPositions] = useState({});
   const handleCreateTask = () => {
@@ -180,7 +180,7 @@ function TaskBoard({
       <Header
         title="Welcome Back, "
         subtitle="Your Team’s Success Starts Here. Let’s Make Progress Together!"
-        userName="UserName"
+        userName={userName}
         date={new Date().toDateString()}
         onCreateTask={() => setShowAddTaskModal(true)}
       />

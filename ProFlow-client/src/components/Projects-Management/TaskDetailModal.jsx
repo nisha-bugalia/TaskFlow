@@ -7,7 +7,7 @@ import { Dialog } from "@headlessui/react";
 const TaskDetailModal = ({ task, onClose, onUpdate, onDelete }) => {
   const [title, setTitle] = useState(task.title || '');
   const [assignee, setAssignee] = useState(task.assignee || '');
-  const [dueDate, setDueDate] = useState(task.dueDate || '');
+  const [endDate, setDueDate] = useState(task.endDate || '');
   const [priority, setPriority] = useState(task.priority || 'Low');
   const [status, setStatus] = useState(task.status || 'Not Started');
   const [description, setDescription] = useState(task.description || '');
@@ -19,7 +19,7 @@ const TaskDetailModal = ({ task, onClose, onUpdate, onDelete }) => {
       ...task,
       title,
       assignee,
-      dueDate,
+      endDate,
       priority,
       status,
       description,
@@ -106,7 +106,7 @@ const handleDeleteTask = () => {
               <input
                 type="date"
                 className="border px-2 py-1 rounded text-sm dark:bg-gray-800 dark:text-white"
-                value={dueDate}
+                value={endDate}
                 onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
