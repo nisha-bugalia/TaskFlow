@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskDetailModal from "./TaskDetailModal";
 import InlineTaskComposer from "./InlineTaskComposer";
+import axios from "axios";
 
 const statuses = ["Not Started", "In Progress", "On Hold", "Completed"];
 
@@ -8,10 +9,49 @@ const ListViewTasks = ({ projectId, preTasks }) => {
   const [tasks, setTasks] = useState(preTasks || []);
   const [selectedTask, setSelectedTask] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeComposer, setActiveComposer] = useState(null); // which section has composer open
+  const [activeComposer, setActiveComposer] = useState(null);
 
-  const handleCreateTask = (newTask) => {
-    setTasks((prev) => [...prev, newTask]);
+  // ✅ Fetch username for each task on mount
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      const updated = await Promise.all(
+        tasks.map(async (task) => {
+          if (!task.assignee) return task;
+          try {
+            const res = await axios.get(
+              `http://localhost:5000/user/get-user?id=${task.assignee}`
+            );
+            return {
+              ...task,
+              assignee: res.data.user.username,
+            };
+          } catch (err) {
+            console.error("Failed to fetch user:", err);
+            return task;
+          }
+        })
+      );
+      setTasks(updated);
+    };
+
+    fetchUsernames();
+  }, []);
+
+  // ✅ Create task & immediately fetch username
+  const handleCreateTask = async (newTask) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/user/get-user?id=${newTask.assignee}`
+      );
+      const enrichedTask = {
+        ...newTask,
+        assignee: res.data.user.username,
+      };
+      setTasks((prev) => [...prev, enrichedTask]);
+    } catch (err) {
+      setTasks((prev) => [...prev, newTask]); // fallback with ID
+    }
+
     setActiveComposer(null);
   };
 
@@ -83,7 +123,7 @@ const ListViewTasks = ({ projectId, preTasks }) => {
                 status={status}
                 onCreate={handleCreateTask}
                 onClose={() => setActiveComposer(null)}
-                showStatus={false} // hide status field
+                showStatus={false}
               />
             )}
           </div>
@@ -96,9 +136,9 @@ const ListViewTasks = ({ projectId, preTasks }) => {
           onClose={() => setModalOpen(false)}
           onUpdate={handleUpdateTask}
           onDelete={(taskId) => {
-    setTasks((prev) => prev.filter((task) => task._id !== taskId));
-    setModalOpen(false);
-  }}
+            setTasks((prev) => prev.filter((task) => task._id !== taskId));
+            setModalOpen(false);
+          }}
         />
       )}
     </div>

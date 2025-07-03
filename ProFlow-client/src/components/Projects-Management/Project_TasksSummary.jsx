@@ -1,21 +1,49 @@
-import React from 'react';
+import React from "react";
 
-const Project_TasksSummary = () => {
+const Project_TasksSummary = ({tasks }) => {
+  // Default to empty array if no tasks provided
+  const total = tasks?.length || 0;
+
+  const summary = {
+    fromMembers: total,
+    inProgress: tasks.filter((t) => t.status === "In Progress").length,
+    underReview: tasks.filter((t) => t.status === "On Hold").length,
+    complete: tasks.filter((t) => t.status === "Completed").length,
+  };
+
   const summaryData = [
-    { label: 'Task form members', count: 20, badgeColor: 'bg-purple-500 text-white' },
-    { label: 'Task In progress', count: 20, badgeColor: 'bg-orange-400 text-white' },
-    { label: 'Under Review', count: 20, badgeColor: 'bg-pink-400 text-white' },
-    { label: 'Task Complete', count: 20, badgeColor: 'bg-green-500 text-white' },
+    {
+      label: "Task from members",
+      count: summary.fromMembers,
+      badgeColor: "bg-purple-500 text-white",
+    },
+    {
+      label: "Task In Progress",
+      count: summary.inProgress,
+      badgeColor: "bg-orange-400 text-white",
+    },
+    {
+      label: "Under Review",
+      count: summary.underReview,
+      badgeColor: "bg-pink-400 text-white",
+    },
+    {
+      label: "Task Complete",
+      count: summary.complete,
+      badgeColor: "bg-green-500 text-white",
+    },
   ];
 
   return (
-    <div className=" border-b border-gray-200 w-full bg-white py-4 px-6 rounded-lg rounded-b-none mt-2">
+    <div className="border-b border-gray-200 w-full bg-white py-4 px-6 rounded-lg rounded-b-none mt-2">
       <div className="flex items-center justify-between gap-6">
         {summaryData.map((item, index) => (
           <div
             key={index}
             className={`flex items-center gap-2 ${
-              index !== summaryData.length - 1 ? 'pr-16 border-r border-gray-300' : ''
+              index !== summaryData.length - 1
+                ? "pr-16 border-r border-gray-300"
+                : ""
             }`}
           >
             <span className="text-base font-bold text-gray-800 whitespace-nowrap">

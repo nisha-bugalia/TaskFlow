@@ -18,7 +18,7 @@ function ProjectDetailPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const location = useLocation();
   const project = location.state;
-  const [tasks, setTasks] = useState();
+  const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState("Overview");
   const handleSave = () => {};
   if (!project) {
@@ -45,6 +45,7 @@ function ProjectDetailPage() {
         .catch((error) => console.log(error))
     
   }, []);
+  // console.log(tasks);
 
   return (
     <div className="md:ml-[20vw] p-4">
@@ -56,7 +57,7 @@ function ProjectDetailPage() {
       />
       {activeTab == "Overview" && (
         <>
-          <Project_TasksSummary />
+          <Project_TasksSummary tasks={tasks}/>
           <ProjectSummary
             description={project.description}
             dueDate={project.endDate}

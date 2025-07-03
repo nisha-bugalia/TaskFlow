@@ -24,11 +24,23 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
   const getStatusColumn = (statusLabel) =>
     tasks.filter((task) => task.status === statusLabel);
 
-  const handleCreateTask = (newTask) => {
-    setTasks((prev) => [...prev, newTask]);
+  const handleCreateTask = async (newTask) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/user/get-user?id=${newTask.assignee}`);
+      const enrichedTask = {
+        ...newTask,
+        assignee: res.data.user.username,
+      };
+      setTasks((prev) => [...prev, enrichedTask]);
+    } catch (error) {
+      alert(error.response?.data?.message || "Error fetching username");
+      setTasks((prev) => [...prev, newTask]); // fallback with raw ID
+    }
+  
     setActiveComposer(null);
     setComposerAtTop(false);
   };
+  
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -50,7 +62,6 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
       composerRefs.current[status]?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
-  const [show, setShow] = useState(false);
   const showUsername = async () => {
     const updatedTasks = await Promise.all(
       tasks.map(async (task) => {
@@ -61,21 +72,21 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
           return {
             ...task,
             assignee: res.data.user.username, // Replace ID with username
-          };
+          }; 
         } catch (error) {
           alert(error.response?.data?.message || "Error fetching username");
           return task; // fallback: return the original task
         }
       })
     );
-
+ 
     setTasks(updatedTasks);
     setShow(true);
   };
 
   useEffect(() => {
     showUsername();
-  }, [tasks, show]);
+  }, []);
 
   const handleGlobalAddTask = () => {
     setActiveComposer("Not Started");
@@ -131,7 +142,7 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
                           </div>
                         )}
 
-                        {show &&
+                        {
                           getStatusColumn(status).map((task, index) => (
                             <Draggable
                               draggableId={task._id}
