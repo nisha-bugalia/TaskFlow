@@ -1,11 +1,12 @@
 import React from "react";
 
-const Project_TasksSummary = ({tasks }) => {
+const Project_TasksSummary = ({tasks , members}) => {
   // Default to empty array if no tasks provided
-  const total = tasks?.length || 0;
+  // const total = tasks?.length || 0;
+  const totalMembers=members.length;
 
   const summary = {
-    fromMembers: total,
+    fromMembers: totalMembers,
     inProgress: tasks.filter((t) => t.status === "In Progress").length,
     underReview: tasks.filter((t) => t.status === "On Hold").length,
     complete: tasks.filter((t) => t.status === "Completed").length,
@@ -13,7 +14,7 @@ const Project_TasksSummary = ({tasks }) => {
 
   const summaryData = [
     {
-      label: "Task from members",
+      label: "Project members",
       count: summary.fromMembers,
       badgeColor: "bg-purple-500 text-white",
     },
@@ -23,7 +24,7 @@ const Project_TasksSummary = ({tasks }) => {
       badgeColor: "bg-orange-400 text-white",
     },
     {
-      label: "Under Review",
+      label: "On Hold",
       count: summary.underReview,
       badgeColor: "bg-pink-400 text-white",
     },

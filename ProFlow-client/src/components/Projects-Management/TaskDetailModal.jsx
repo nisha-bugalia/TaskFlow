@@ -7,8 +7,16 @@ import { Dialog } from "@headlessui/react";
 const TaskDetailModal = ({ task, onClose, onUpdate, onDelete }) => {
   const [title, setTitle] = useState(task.title || '');
   const [assignee, setAssignee] = useState(task.assignee || '');
-  const [endDate, setDueDate] = useState(task.endDate || '');
-  const [priority, setPriority] = useState(task.priority || 'Low');
+  const formatDateForInput = (dateString) => {
+    const date = new Date(dateString);
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset); // Remove timezone offset
+    return date.toISOString().split('T')[0];     // Get YYYY-MM-DD
+  };
+  
+  const [endDate, setDueDate] = useState(formatDateForInput(task.endDate || ''));
+  
+    const [priority, setPriority] = useState(task.priority || 'Low');
   const [status, setStatus] = useState(task.status || 'Not Started');
   const [description, setDescription] = useState(task.description || '');
   const [comment, setComment] = useState('');

@@ -13,6 +13,7 @@ import ListViewTasks from "./ListViewTasks";
 import Timeline from "../dashboard/Timeline";
 import MessagesTab from "./Messages/MessagesTab";
 import axios from "axios";
+import ProjectCalendar from "./ProjectCalendar";
 
 function ProjectDetailPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -57,7 +58,7 @@ function ProjectDetailPage() {
       />
       {activeTab == "Overview" && (
         <>
-          <Project_TasksSummary tasks={tasks}/>
+          <Project_TasksSummary tasks={tasks} members={project.teamMembers}/>
           <ProjectSummary
             description={project.description}
             dueDate={project.endDate}
@@ -81,6 +82,7 @@ function ProjectDetailPage() {
 
       {activeTab == "Board" && <ProjectViewToggle projectId={project._id} preTasks={tasks} />}
       {activeTab == "Timeline" && <Timeline tasks={tasks} />}
+      {activeTab == "Calendar" && <ProjectCalendar tasks={tasks} />}
       {activeTab == "Messages" && <MessagesTab />}
     </div>
   );
