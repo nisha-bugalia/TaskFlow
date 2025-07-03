@@ -15,6 +15,9 @@ Problem:
 shown then after their username is shown after reload in the assigne Section.
 3.So change it i have set the function in the useeffect to change the user array based where the field is assigne_id to username for the list of the tasks in the As ProjectViewToggle.
 
-explain problem 2nd point ...where this userId and username will be shown...i think in that assignee field there should be a dropdown of current members of project...but i dont get what to enter in that field..so i am not able to proceed.
 
-That 5th point you mentioned i have already done that yesterday ..in dashboard we are fetching all tasks not separate tasks of each project
+
+I have fixed point 2nd....and the login UI cannot be changed to use the username, because the entire backend logic is built around the user's email not username(I tried but everything get messed up in frontend).
+
+That 5th point you mentioned i have already done that yesterday ..in dashboard we are fetching all tasks not separate tasks of each project       
+Please add the delete and update api for tasks asap and if done push them
