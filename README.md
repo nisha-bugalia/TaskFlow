@@ -19,5 +19,8 @@ shown then after their username is shown after reload in the assigne Section.
 
 I have fixed point 2nd....and the login UI cannot be changed to use the username, because the entire backend logic is built around the user's email not username(I tried but everything get messed up in frontend).
 
-That 5th point you mentioned i have already done that yesterday ..in dashboard we are fetching all tasks not separate tasks of each project       
+That 5th point you mentioned i have already done that yesterday ..in dashboard we are fetching all tasks not separate tasks of each project 
+
 Please add the delete and update api for tasks asap and if done push them
+
+It is getting really difficult to work like this. I think we should just unblock each other for now...complete the project as soon as possible...and once it is done, we can go our separate ways
