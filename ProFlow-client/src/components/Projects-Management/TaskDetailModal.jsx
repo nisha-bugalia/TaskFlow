@@ -8,11 +8,14 @@ const TaskDetailModal = ({ task, onClose, onUpdate, onDelete }) => {
   const [title, setTitle] = useState(task.title || '');
   const [assignee, setAssignee] = useState(task.assignee || '');
   const formatDateForInput = (dateString) => {
+    if (!dateString) return ''; // safeguard for null or undefined
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return ''; // safeguard for invalid date
     const offset = date.getTimezoneOffset();
-    date.setMinutes(date.getMinutes() - offset); // Remove timezone offset
-    return date.toISOString().split('T')[0];     // Get YYYY-MM-DD
+    date.setMinutes(date.getMinutes() - offset);
+    return date.toISOString().split('T')[0];
   };
+  
   
   const [endDate, setDueDate] = useState(formatDateForInput(task.endDate || ''));
   

@@ -23,6 +23,7 @@ import UploadImage from "./components/UploadImage";
 import ProjectDetailPage from "./components/Projects-Management/ProjectDetailPage";
 import { Toaster } from 'react-hot-toast';
 import axios from "axios";
+import ProfilePage from "./components/ProfilePage/ProfilePage";
 
 
 function AppContent() {
@@ -205,6 +206,12 @@ const handleAddProject=(newProject)=>{
                       taskModalOpenRef={taskModalOpenRef}
                     />
                   }
+                />
+                <Route 
+                path="/profile"
+                element={
+                  <ProfilePage/>
+                }
                 />
                 <Route
                   path="/projects"

@@ -25,7 +25,9 @@ const LoginPage = () => {
       .then((res) => {
         if (res.status === 200) {
           console.log("User returned from backend:", res.data.user.fullName);
-          localStorage.setItem("userName", res.data.user.fullName);
+          console.log("user:", res.data.user)
+          localStorage.setItem("userName", res.data.user.username);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
           alert(res.data.message);
           navigate("/dashboard");
         } else {
