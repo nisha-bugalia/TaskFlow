@@ -14,6 +14,7 @@ import Timeline from "../dashboard/Timeline";
 import MessagesTab from "./Messages/MessagesTab";
 import axios from "axios";
 import ProjectCalendar from "./ProjectCalendar";
+import FileTab from "./Files_tab/FileTab"
 
 function ProjectDetailPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -84,6 +85,7 @@ function ProjectDetailPage() {
       {activeTab == "Timeline" && <Timeline tasks={tasks} />}
       {activeTab == "Calendar" && <ProjectCalendar tasks={tasks} />}
       {activeTab == "Messages" && <MessagesTab />}
+      {activeTab === "Files" && <FileTab/>}
     </div>
   );
 }
