@@ -28,14 +28,23 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
   };
 
   return (
-    <Dialog open={true} onClose={onClose} className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <Dialog
+      open={true}
+      onClose={onClose}
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
+    >
       <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
       <div className="bg-white dark:bg-gray-900 w-full max-w-lg p-6 rounded-lg z-50 relative shadow-xl">
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-500 hover:text-black">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-black"
+        >
           <FiX size={20} />
         </button>
 
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Edit Profile</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+          Edit Profile
+        </h2>
 
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
@@ -84,20 +93,20 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
           >
             <option value="">Select Role</option>
             <option value="">Select Role</option>
-  <option>Developer</option>
-  <option>Software Engineer</option>
-  <option>Project Manager</option>
-  <option>Team Lead</option>
-  <option>UI/UX Designer</option>
-  <option>Graphic Designer</option>
-  <option>Content Creator</option>
-  <option>DevOps Engineer</option>
-  <option>Marketing Manager</option>
-  <option>Business Analyst</option>
-  <option>Operations Manager</option>
-  <option>Freelancer</option>
-  <option>Student</option>
-  <option>Other</option>
+            <option>Developer</option>
+            <option>Software Engineer</option>
+            <option>Project Manager</option>
+            <option>Team Lead</option>
+            <option>UI/UX Designer</option>
+            <option>Graphic Designer</option>
+            <option>Content Creator</option>
+            <option>DevOps Engineer</option>
+            <option>Marketing Manager</option>
+            <option>Business Analyst</option>
+            <option>Operations Manager</option>
+            <option>Freelancer</option>
+            <option>Student</option>
+            <option>Other</option>
           </select>
         </div>
 

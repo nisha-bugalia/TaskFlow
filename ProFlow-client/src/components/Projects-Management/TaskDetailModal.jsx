@@ -177,7 +177,7 @@ const handleDeleteTask = () => {
               <div key={c.id} className="bg-white dark:bg-gray-700 p-2 rounded text-sm shadow-sm">
                 <div>{c.text}</div>
                 <div className="text-right text-gray-400 text-[10px]">
-                  {format(new Date(c.date), 'PPpp')}
+                  {formatDateForInput(new Date(c.date), 'PPpp')}
                 </div>
               </div>
             ))}

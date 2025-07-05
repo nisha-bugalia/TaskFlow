@@ -10,9 +10,12 @@ const MyProjectsSection = ({ user }) => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/project/get-projects", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "http://localhost:5000/project/get-projects",
+          {
+            withCredentials: true,
+          }
+        );
 
         const allProjects = res.data.projects || [];
 
@@ -37,13 +40,15 @@ const MyProjectsSection = ({ user }) => {
 
   return (
     <div className="mt-10">
-      <div className="bg-white p-6 dark:bg-gray-900 rounded-lg shadow border dark:border-gray-700 overflow-hidden">
+      <div className="bg-white p-6 dark:bg-gray-900 rounded-lg shadow border dark:border-gray-700 min-h-[450px]">
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           My Recent Projects
         </h3>
 
         {projects.length === 0 ? (
-          <p className="text-sm text-gray-500">You are not part of any project yet.</p>
+          <p className="text-sm text-gray-500">
+            You are not part of any project yet.
+          </p>
         ) : (
           <div>
             {projects.map((project) => (

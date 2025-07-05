@@ -24,6 +24,7 @@ import ProjectDetailPage from "./components/Projects-Management/ProjectDetailPag
 import { Toaster } from 'react-hot-toast';
 import axios from "axios";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
+import SettingsPage from "./components/Settings/SettingsPage";
 
 
 function AppContent() {
@@ -211,6 +212,12 @@ const handleAddProject=(newProject)=>{
                 path="/profile"
                 element={
                   <ProfilePage/>
+                }
+                />
+                <Route 
+                path="/settings"
+                element={
+                  <SettingsPage/>
                 }
                 />
                 <Route
