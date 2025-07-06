@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FiBell, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import { FiBell, FiCheckCircle, FiAlertCircle, FiSettings } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { FaBell } from "react-icons/fa";
@@ -74,7 +74,7 @@ const NotificationDropdown = () => {
         onClick={() => setOpen(!open)}
         className="border p-3 border-gray-200 rounded-lg bg-white"
       >
-        <FaBell className=" text-gray-700 dark:text-zinc-200" />
+        <FaBell className=" text-gray-700 " />
       </button>
 
       {open && (
@@ -106,13 +106,18 @@ const NotificationDropdown = () => {
             )}
           </ul>
 
-          <div className="p-2 text-center border-t dark:border-zinc-700">
+          <div className="p-2 flex justify-between items-center text-center border-t dark:border-zinc-700">
+            <button className="text-black dark:text-white"
+            onClick={()=>{navigate("/settings")}}
+            >
+              <FiSettings/>
+            </button>
             <button
               onClick={() => {
                 navigate("/notifications");
                 setOpen(false);
               }}
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
             >
               View All
             </button>

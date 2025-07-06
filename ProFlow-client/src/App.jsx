@@ -25,6 +25,7 @@ import { Toaster } from 'react-hot-toast';
 import axios from "axios";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
 import SettingsPage from "./components/Settings/SettingsPage";
+import NotificationPage from "./components/NotificationPage";
 
 
 function AppContent() {
@@ -220,6 +221,10 @@ const handleAddProject=(newProject)=>{
                   <SettingsPage/>
                 }
                 />
+                <Route 
+                path="/notifications" 
+                element={<NotificationPage/>}/>
+
                 <Route
                   path="/projects"
                   element={

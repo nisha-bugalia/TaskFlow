@@ -3,7 +3,7 @@ import { FiEdit2 } from "react-icons/fi";
 
 const ProfileHeader = ({ user, onEdit }) => {
   return (
-    <div className=" dark:bg-gray-900 rounded-xl p-6 shadow-sm dark:border-gray-800 flex flex-col md:flex-row items-center gap-6">
+    <div className=" dark:bg-gray-900 rounded-xl p-6 pt-0 shadow-sm dark:border-gray-800 flex flex-col md:flex-row items-center gap-6">
       {/* Avatar */}
       <div className="flex-shrink-0">
         <img

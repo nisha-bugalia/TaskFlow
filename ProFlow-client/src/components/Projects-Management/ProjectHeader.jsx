@@ -32,7 +32,7 @@ const ProjectHeader = ({ id, title, activeTab, onTabChange }) => {
         <div className="flex items-center gap-4">
           <button
             className="flex items-center gap-2 px-3 py-1 rounded bg-black text-white hover:bg-gray-900 transition"
-            onClick={() => navigate('/projects')}
+            onClick={() => navigate(-1)}
           >
             <AiOutlineArrowLeft size={18} />
             Back
@@ -56,9 +56,6 @@ const ProjectHeader = ({ id, title, activeTab, onTabChange }) => {
             {tab.name}
           </button>
         ))}
-        <button className="ml-auto p-2 text-gray-500 hover:text-black">
-          <FiPlus />
-        </button>
       </div>
     </div>
   );
