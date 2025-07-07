@@ -6,10 +6,10 @@ import TaskDetailModal from "./TaskDetailModal";
 import axios from "axios";
 
 const statusColors = {
-  "Not Started": "bg-red-50 border border-red-300",
-  "In Progress": "bg-blue-50 border border-blue-200",
-  "On Hold": "bg-yellow-50 border border-yellow-200",
-  Completed: "bg-green-50 border border-green-200",
+  "Not Started": "bg-red-50 ",
+  "In Progress": "bg-sky-50 ",
+  "On Hold": "bg-yellow-50 ",
+  "Completed": "bg-green-50",
 };
 
 const ProjectViewToggle = ({ projectId, preTasks }) => {
@@ -120,12 +120,12 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
                       provided.innerRef(ref);
                       columnRefs.current[status] = ref;
                     }}
-                    className={`rounded-lg p-4 shadow border-2 flex flex-col overflow-hidden min-h-[300px] max-h-[400px] bg-gray-100 dark:bg-gray-800 border-gray-300 ${statusColors[status]}`}
+                    className={`rounded-lg p-4 flex flex-col overflow-hidden min-h-[300px] max-h-[400px] bg-gray-100 dark:bg-gray-800 border-gray-300 ${statusColors[status]}`}
                   >
                     <h3 className="text-md font-bold mb-3 border-b pb-1">
-                      <span className="mr-1">●</span>
                       {status}
                     </h3>
+                    
 
                     <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
                       <div className="flex flex-col gap-3">
@@ -159,7 +159,7 @@ const ProjectViewToggle = ({ projectId, preTasks }) => {
                                     setSelectedTask(task);
                                     setModalOpen(true);
                                   }}
-                                  className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 hover:shadow-sm transition duration-200 transform hover:scale-[1.01] cursor-pointer"
+                                  className="p-4 bg-white dark:bg-gray-900 rounded-xl  hover:shadow-sm transition duration-200 transform hover:scale-[1.01] cursor-pointer"
                                 >
                                   <h4 className="font-semibold text-gray-800 dark:text-white mb-2">
                                     {task.title}

@@ -26,6 +26,7 @@ import axios from "axios";
 import ProfilePage from "./components/ProfilePage/ProfilePage";
 import SettingsPage from "./components/Settings/SettingsPage";
 import NotificationPage from "./components/NotificationPage";
+import HomePage from "./Landing_HomePage/HomePage";
 
 
 function AppContent() {
@@ -85,10 +86,13 @@ const handleAddProject=(newProject)=>{
   const navigate = useNavigate();
 
   const isAuthRoute = location.pathname === "/login" 
-   ||location.pathname === "/signup"
-   ||location.pathname === "/verify-pending" 
-   || location.pathname==="/verify-email"
-   || location.pathname==="/onboarding-flow" || location.pathname==="/signupstep1" || location.pathname==="/upload";
+    ||location.pathname === "/signup"
+    ||location.pathname === "/verify-pending" 
+    || location.pathname==="/verify-email"
+    || location.pathname==="/onboarding-flow"
+    || location.pathname==="/signupstep1" 
+    || location.pathname==="/upload" 
+    ||location.pathname==="/";
 
   const [output, setOutput] = useState("");
 
@@ -242,8 +246,8 @@ const handleAddProject=(newProject)=>{
       {isAuthRoute && (
         <>
         <Routes>
-          <Route path="/login" element={<LoginModal />} />
-          {/* <Route path="/signup" element={<SignupPage />} /> */}
+        <Route path="/" element={<HomePage darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>}/>
+        <Route path="/login" element={<LoginModal />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/upload" element={<UploadImage />} />
         
