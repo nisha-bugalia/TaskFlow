@@ -18,7 +18,10 @@ const FileCard = ({ file, onClick, onRemove }) => {
   return (
     <div className="relative p-3 bg-gray-100 dark:bg-gray-800 rounded-lg shadow hover:shadow-md hover:scale-[1.02] transition-all duration-200">
       <button
-        onClick={onRemove}
+        onClick={(e) => {
+          e.stopPropagation(); 
+          onRemove();
+        }}
         className="absolute top-2 right-2 bg-white dark:bg-gray-900 text-gray-500 hover:text-red-600 rounded-full p-1 shadow"
       >
         <FiX size={16} />

@@ -22,7 +22,7 @@ const HomePageHero = ({ darkMode, toggleDarkMode }) => {
             <div className="hidden md:flex items-center gap-6 text-gray-700 dark:text-gray-200">
               <a href="#features" className="hover:text-purple-600">Features</a>
               <a href="#how" className="hover:text-purple-600">How it Works</a>
-              <a href="#pricing" className="hover:text-purple-600">Pricing</a>
+              {/* <a href="#pricing" className="hover:text-purple-600">Pricing</a> */}
             </div>
 
             {/* Dark Mode Toggle */}
