@@ -14,7 +14,8 @@ const axios = require("axios");
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser()); // ✅ This enables reading req.cookies.token
-
+app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
 connect();
 app.use(express.json());
 app.use(

@@ -1,58 +1,85 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { FiFileText } from "react-icons/fi";
 import FileUpload from "./FileUpload";
 import FileCard from "./FileCard";
 import FilePreviewModal from "./FilePreviewModal";
+import axios from "axios";
 
-const FilesTab = () => {
+const FilesTab = ({ projectId }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [filteredFiles, setFilteredFiles] = useState(null);
   const [previewedFile, setPreviewedFile] = useState(null);
   const [fileTypeFilter, setFileTypeFilter] = useState("All");
+  useEffect(() => {
+    if (!projectId) return;
 
-  const filteredFiles = selectedFiles.filter((file) => {
-    const type = file.type;
+    const fetchFiles = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/project/files/${projectId}`
+        );
+        setSelectedFiles(res.data.files);
+        
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      }
+    };
+    fetchFiles(); 
+  }, [projectId]);
+useEffect(()=>{
+if(selectedFiles.length===0){
+  return;
+}
+const setFiles=()=>{
+  const files = selectedFiles.filter((file) => {
+          const type = file.type;
 
-    if (fileTypeFilter === "All") return true;
+          if (fileTypeFilter === "All") return true;
 
-    if (fileTypeFilter === "PDF") return type === "application/pdf";
+          if (fileTypeFilter === "PDF") return type === "application/pdf";
 
-    if (fileTypeFilter === "Image") return type.startsWith("image/");
+          if (fileTypeFilter === "Image") return type.startsWith("image/");
 
-    if (fileTypeFilter === "Doc")
-      return (
-        type === "application/msword" ||
-        type ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      );
+          if (fileTypeFilter === "Doc")
+            return (
+              type === "application/msword" ||
+              type ===
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            );
 
-    if (fileTypeFilter === "Text") return type === "text/plain";
+          if (fileTypeFilter === "Text") return type === "text/plain";
 
-    if (fileTypeFilter === "Code") {
-      const ext = file.name.split(".").pop();
-      return [
-        "js",
-        "ts",
-        "py",
-        "html",
-        "css",
-        "json",
-        "cpp",
-        "c",
-        "java",
-      ].includes(ext);
-    }
+          if (fileTypeFilter === "Code") {
+            const ext = file.name.split(".").pop();
+            return [
+              "js",
+              "ts",
+              "py",
+              "html",
+              "css",
+              "json",
+              "cpp",
+              "c",
+              "java",
+            ].includes(ext);
+          }
 
-    return true;
-  });
-
-  return (
-    <div className="p-6 bg-white dark:bg-gray-900 mt-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+          return true;
+        });
+        
+        setFilteredFiles(files);
+}
+setFiles()
+},[selectedFiles,fileTypeFilter])
+  return (<>
+    {filteredFiles && <div className="p-6 bg-white dark:bg-gray-900 mt-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <FiFileText /> Project Files
         </h2>
         <FileUpload
+          projectId={projectId}
           selectedFiles={selectedFiles}
           setSelectedFiles={setSelectedFiles}
         />
@@ -94,7 +121,7 @@ const FilesTab = () => {
           onClose={() => setPreviewedFile(null)}
         />
       )}
-    </div>
+    </div>}</>
   );
 };
 

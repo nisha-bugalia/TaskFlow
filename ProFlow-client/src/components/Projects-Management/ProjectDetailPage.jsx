@@ -85,7 +85,7 @@ function ProjectDetailPage() {
       {activeTab == "Timeline" && <Timeline tasks={tasks} />}
       {activeTab == "Calendar" && <ProjectCalendar tasks={tasks} />}
       {activeTab == "Messages" && <MessagesTab />}
-      {activeTab === "Files" && <FileTab/>}
+      {activeTab === "Files" && <FileTab projectId={project._id}/>}
     </div>
   );
 }

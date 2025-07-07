@@ -2,14 +2,15 @@ import React from "react";
 import { FiFile, FiX } from "react-icons/fi";
 
 const FileCard = ({ file, onClick, onRemove }) => {
+  console.log(file.fileUrl)
   const getFileIcon = (type) => {
     if (type.startsWith("image/"))
       return (
-        <img
-          src={URL.createObjectURL(file)}
-          alt="preview"
-          className="h-24 w-full object-cover rounded"
-        />
+       <img
+        src={`http://localhost:5000${file.fileUrl}`}
+        alt={file.fileName}
+        className="h-24 w-full object-cover rounded"
+      />
       );
     return <FiFile className="text-4xl text-purple-600" />;
   };
@@ -31,7 +32,7 @@ const FileCard = ({ file, onClick, onRemove }) => {
       </div>
 
       <div className="text-sm truncate text-center dark:text-white">
-        {file.name}
+        {file.fileName}
       </div>
     </div>
   );

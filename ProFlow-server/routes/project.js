@@ -3,7 +3,9 @@ const router = express.Router();
 const verifyIdentity = require("../middlewares/authMiddleware");
 const Project = require("../models/Project");
 const User = require("../models/User");
-
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 //to create a project
 router.post("/create-project", verifyIdentity, async (req, res) => {
   try {
@@ -126,5 +128,89 @@ router.post("/edit", async (req, res) => {
       });
   }
 });
-//
+//to save the files and store their path in the mongodb database
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+     const projectId = req.query.projectId;
+
+    if (!projectId) {
+      return cb(new Error("Project ID is required"), false);
+    }
+
+    const dir = path.join(__dirname, "../uploads", projectId);
+
+   
+    fs.mkdirSync(dir, { recursive: true });
+
+    cb(null, dir);
+  },
+
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+
+const File = require("../models/File"); // ✅ import your model
+
+router.post("/upload", upload.single("file"), async (req, res) => {
+  const file = req.file;
+  const projectId = req.query.projectId;
+
+  if (!file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const fileData = {
+    fileName: file.originalname,
+    savedAs: file.filename,
+    fileUrl: `/uploads/${projectId}/${file.filename}`,
+    type: file.mimetype,
+    size: file.size,
+    projectId,
+  };
+
+  try {
+    const savedFile = await File.create(fileData);
+
+    res.json({
+      message: "File uploaded successfully",
+      file: savedFile,
+    });
+  } catch (err) {
+    console.error("DB Save Error:", err);
+    res.status(500).json({ error: "Failed to save file to database" });
+  }
+});
+
+//to get the files
+router.get("/files/:projectId", async (req, res) => {
+  const projectId = req.params.projectId;
+
+  try {
+    const files = await File.find({ projectId });
+
+    res.json({ files });
+  } catch (err) {
+    console.error("DB Fetch Error:", err);
+    res.status(500).json({ error: "Failed to fetch files from database" });
+  }
+});
+//to dowload the files
+
+router.get("/download/:projectId/:fileName", (req, res) => {
+  const { projectId, fileName } = req.params;
+
+  const filePath = path.join(__dirname, "../uploads", projectId, fileName);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: "File not found" });
+  }
+
+  res.download(filePath, fileName); 
+});
+
 module.exports = router;
