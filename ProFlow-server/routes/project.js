@@ -213,4 +213,27 @@ router.get("/download/:projectId/:fileName", (req, res) => {
   res.download(filePath, fileName); 
 });
 
+//delete a file by ID
+router.delete("/file/:fileId", async (req, res) => {
+  const { fileId } = req.params;
+
+  try {
+    const file = await File.findById(fileId);
+    if (!file) return res.status(404).json({ error: "File not found" });
+
+    const filePath = path.join(__dirname, "..", "uploads", file.projectId, file.savedAs);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    await file.deleteOne();
+
+    res.status(200).json({ message: "File deleted successfully" });
+  } catch (err) {
+    console.error("Delete file error:", err);
+    res.status(500).json({ error: "Failed to delete file" });
+  }
+});
+
+
 module.exports = router;
